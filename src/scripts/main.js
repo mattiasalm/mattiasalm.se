@@ -1,3 +1,4 @@
+//
 // Config
 const config = {
   content: {
@@ -5,21 +6,35 @@ const config = {
   },
 };
 
-// Util
+//
+// Async wait function
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+//
+// Check if url is considered to be a relative path
 const isRelativeUrl = url => url.indexOf('://') < 1 && url.indexOf('//') !== 0;
 
+//
+// Remove leading slash in string
 const stripLeadingSlash = str =>
   str.indexOf('/') === 0 ? str.substring(1) : str;
 
+//
+// Check if is running on a Mac
 const isMac = () => window.navigator.appVersion.includes('Mac');
 
-// Element handles
+//
+// Element references
 var _elements = {};
+
+//
+// Set element reference
 var setElement = (name, selector) =>
   (_elements[name] = document.querySelector(selector));
 
+//
+// Getters to element references that also triggers to set the
+// reference if it is missing
 var elements = {
   get body() {
     return _elements.body || setElement('body', 'body');
@@ -32,7 +47,9 @@ var elements = {
   },
 };
 
-// Loading
+//
+// Global loading handlers. Starts and stops
+// full screen loading by setting the 'loading' attribute to body
 var loading = {
   isLoading: () => elements.body.hasAttribute('loading'),
   start: () =>
@@ -40,6 +57,9 @@ var loading = {
   stop: () => loading.isLoading() && elements.body.removeAttribute('loading'),
 };
 
+//
+// Fade content handlers. Starts and stops
+// content section fading by setting the 'fade' attribute to body
 var fadeContentNode = {
   isLoading: () => elements.body.hasAttribute('fade'),
   start: () =>
@@ -48,9 +68,12 @@ var fadeContentNode = {
     fadeContentNode.isLoading() && elements.body.removeAttribute('fade'),
 };
 
-// Route
+//
+// Get current path from window URL
 const getPath = () => window.location.pathname;
 
+//
+// Add new history entry and update the path
 const updatePath = path => {
   const currentPath = getPath();
   if (currentPath === path) {
@@ -59,7 +82,8 @@ const updatePath = path => {
   history.pushState('', path, path);
 };
 
-// Fetch
+//
+// Async fetch content from URL and return as text
 async function getHtmlFromUrl(url) {
   const response = await fetch(url);
   if (response.status >= 400 && response.status < 600) {
@@ -68,21 +92,28 @@ async function getHtmlFromUrl(url) {
   return await response.text();
 }
 
-// ContentNode
+//
+// Add child node to parent element
 const addChildNode = (parent, child) => parent.appendChild(child);
 
+//
+// Remove all child nodes in parent element
 const removeChildNodes = parent => {
   while (parent.firstChild) {
     parent.firstChild.remove();
   }
 };
 
+//
+// Create element nodes from HTML text string
 const createNodesFromHtml = html => {
   const template = document.createElement('template');
   template.innerHTML = html;
   return template.content.childNodes;
 };
 
+//
+// Create full URL from path and append content folder and extension
 const createUrlFromPath = path => {
   let newPath = stripLeadingSlash(path);
   if (newPath === '') {
@@ -91,6 +122,8 @@ const createUrlFromPath = path => {
   return `${config.content.folder}/${newPath}.html`;
 };
 
+//
+// Fetch new content based on path and mount it in the DOM #content container
 async function goToRoutePath(path) {
   const url = createUrlFromPath(path);
   const html = await getHtmlFromUrl(url).catch(err => {
@@ -113,6 +146,8 @@ async function goToRoutePath(path) {
   }
 }
 
+//
+// Fetch nav content and mount it in the DOM #nav container
 async function loadNav() {
   const url = createUrlFromPath('/nav');
   const html = await getHtmlFromUrl(url).catch(err => {
@@ -127,7 +162,10 @@ async function loadNav() {
   }
 }
 
-const setNavActivePath = () => {
+//
+// Add class 'active-link' on all links in nav that match current path
+// and remove class on the others
+const setActiveLinksInNav = () => {
   const linkArray = Array.from(elements.nav.querySelectorAll('a'));
 
   const activeLinks = linkArray.filter(
@@ -150,14 +188,21 @@ const setNavActivePath = () => {
   });
 };
 
-// Hooks
+//
+// On window load event (when all linked resources has been loaded)
+// read path from window URL and load content corresponding to that
+// also load nav content
 window.onload = () => {
   Promise.all([goToRoutePath(getPath()), loadNav()]).then(() => {
     loading.stop();
-    setNavActivePath();
+    setActiveLinksInNav();
   });
 };
 
+//
+// Catch all click events that has and anchor as target
+// and prevent all relative link paths from reloading the page.
+// Load the new content in the #content container instead
 window.onclick = event => {
   if (!event.target.matches('a')) {
     return;
@@ -173,15 +218,19 @@ window.onclick = event => {
     }
 
     event.preventDefault();
+    elements.nav.querySelector('input').checked = false;
     goToRoutePath(path).then(() => {
-      setNavActivePath();
+      setActiveLinksInNav();
     });
   }
 };
 
+//
+// When back button is clicked in browser update the content
+// corresponding to the path
 window.onpopstate = event => {
   event.preventDefault();
   goToRoutePath(getPath()).then(() => {
-    setNavActivePath();
+    setActiveLinksInNav();
   });
 };

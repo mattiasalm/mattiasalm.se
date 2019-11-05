@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "public": "src",
+  "rewrites": [
+    { "source": "/.*", "destination": "/index.html" }
+  ] 
+}

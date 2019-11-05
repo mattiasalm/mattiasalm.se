@@ -1,3 +1,8 @@
+:root {
+  --breakpoint-small-and-up: 480px;
+  --breakpoint-medium-and-up: 900px;
+}
+
 *,
 *:before,
 *:after {
@@ -35,11 +40,11 @@ a.active-link {
   text-decoration: none;
 }
 
-body #root {
+body #content {
   transition: 320ms opacity ease-in-out;
 }
 
-body[fade] #root {
+body[fade] #content {
   overflow: hidden;
   opacity: 0;
 }
