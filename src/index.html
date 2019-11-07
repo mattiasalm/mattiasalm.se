@@ -7,32 +7,32 @@
 
     <style>
       :root {
-        --loader-state-transition: 0.5s;
-        --loader-dot-size: 40px;
-        --loader-dot-color: #222;
-        --loader-backdrop-color: #444;
-        --loader-animation-duration: 0.5s;
-        --loader-scale-start: 1;
-        --loader-scale-end: 0.8;
+        --splash-loader-state-transition: 0.5s;
+        --splash-loader-dot-size: 40px;
+        --splash-loader-dot-color: #222;
+        --splash-loader-backdrop-color: #444;
+        --splash-loader-animation-duration: 0.5s;
+        --splash-loader-scale-start: 1;
+        --splash-loader-scale-end: 0.8;
       }
       @keyframes pulse {
         from {
-          transform: scale(var(--loader-scale-start));
+          transform: scale(var(--splash-loader-scale-start));
         }
 
         to {
-          transform: scale(var(--loader-scale-end));
+          transform: scale(var(--splash-loader-scale-end));
         }
       }
 
-      #loading {
+      #splash-loading {
         content: '';
-        background: var(--loader-backdrop-color);
+        background: var(--splash-loader-backdrop-color);
         display: grid;
         grid-template-columns:
-          auto var(--loader-dot-size) var(--loader-dot-size)
+          auto var(--splash-loader-dot-size) var(--splash-loader-dot-size)
           auto;
-        grid-template-rows: auto var(--loader-dot-size) var(--loader-dot-size) var(--loader-dot-size) auto;
+        grid-template-rows: auto var(--splash-loader-dot-size) var(--splash-loader-dot-size) var(--splash-loader-dot-size) auto;
         grid-gap: 4px;
         top: 0;
         left: 0;
@@ -41,46 +41,46 @@
         opacity: 0;
         overflow: visible;
         position: fixed;
-        transition: var(--loader-state-transition) opacity linear;
+        transition: var(--splash-loader-state-transition) opacity linear;
         z-index: 998;
         pointer-events: none;
       }
 
-      #loading > div {
-        background: var(--loader-dot-color);
+      #splash-loading > div {
+        background: var(--splash-loader-dot-color);
         pointer-events: none;
         border-radius: 999px;
         transform-origin: center;
         overflow: visible;
-        animation: var(--loader-animation-duration) pulse paused alternate
+        animation: var(--splash-loader-animation-duration) pulse paused alternate
           infinite ease-in-out;
       }
 
-      #loading > div:nth-child(1) {
+      #splash-loading > div:nth-child(1) {
         animation-delay: 0s;
         grid-column: 2 / 3;
         grid-row: 2 / 3;
       }
 
-      #loading > div:nth-child(2) {
-        animation-delay: var(--loader-animation-duration);
+      #splash-loading > div:nth-child(2) {
+        animation-delay: var(--splash-loader-animation-duration);
         grid-column: 3 / 4;
         grid-row: 2 / 3;
       }
 
-      #loading > div:nth-child(3) {
-        animation-delay: var(--loader-animation-duration);
+      #splash-loading > div:nth-child(3) {
+        animation-delay: var(--splash-loader-animation-duration);
         grid-column: 2 / 3;
         grid-row: 3 / 4;
       }
 
-      #loading > div:nth-child(4) {
+      #splash-loading > div:nth-child(4) {
         animation-delay: 0s;
         grid-column: 3 / 4;
         grid-row: 3 / 4;
       }
 
-      #loading > div:nth-child(5) {
+      #splash-loading > div:nth-child(5) {
         animation-play-state: paused;
         grid-column: 2 / 4;
         grid-row: 4 / 5;
@@ -89,16 +89,16 @@
         background-color: transparent;
       }
 
-      body[loading] {
+      body[splash-loading] {
         overflow: hidden;
       }
 
-      body[loading] #loading {
+      body[splash-loading] #splash-loading {
         opacity: 1;
         pointer-events: all;
       }
 
-      body[loading] #loading > div {
+      body[splash-loading] #splash-loading > div {
         animation-play-state: running;
       }
     </style>
@@ -106,10 +106,10 @@
     <link rel="stylesheet" href="styles/main.css" />
     <script async type="text/javascript" src="scripts/main.js"></script>
   </head>
-  <body loading fade>
+  <body splash-loading fade>
     <nav id="nav"></nav>
     <div id="content"></div>
-    <div id="loading">
+    <div id="splash-loading">
       <div></div>
       <div></div>
       <div></div>

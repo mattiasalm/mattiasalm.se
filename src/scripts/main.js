@@ -6,80 +6,84 @@ const config = {
   },
 };
 
-//
-// Async wait function
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const utils = {
+  //
+  // Async wait function
+  wait: ms => new Promise(resolve => setTimeout(resolve, ms)),
 
-//
-// Check if url is considered to be a relative path
-const isRelativeUrl = url => url.indexOf('://') < 1 && url.indexOf('//') !== 0;
+  //
+  // Check if url is considered to be a relative path
+  isRelativeUrl: url => url.indexOf('://') < 1 && url.indexOf('//') !== 0,
 
-//
-// Remove leading slash in string
-const stripLeadingSlash = str =>
-  str.indexOf('/') === 0 ? str.substring(1) : str;
+  //
+  // Remove leading slash in string
+  stripLeadingSlash: str => (str.indexOf('/') === 0 ? str.substring(1) : str),
 
-//
-// Check if is running on a Mac
-const isMac = () => window.navigator.appVersion.includes('Mac');
+  //
+  // Check if is running on a Mac
+  isMac: () => window.navigator.appVersion.includes('Mac'),
 
-//
-// Element references
-var _elements = {};
-
-//
-// Set element reference
-var setElement = (name, selector) =>
-  (_elements[name] = document.querySelector(selector));
+  //
+  // Create full URL from path and append content folder and extension
+  createUrlFromPath: path => {
+    let newPath = utils.stripLeadingSlash(path);
+    if (newPath === '') {
+      newPath = 'index';
+    }
+    return `${config.content.folder}/${newPath}.html`;
+  },
+};
 
 //
 // Getters to element references that also triggers to set the
 // reference if it is missing
 var elements = {
+  _elements: {},
+
+  setElement: (name, selector) =>
+    (elements._elements[name] = document.querySelector(selector)),
+
   get body() {
-    return _elements.body || setElement('body', 'body');
+    return elements._elements.body || elements.setElement('body', 'body');
   },
+
   get nav() {
-    return _elements.nav || setElement('nav', '#nav');
+    return elements._elements.nav || elements.setElement('nav', '#nav');
   },
+
   get contentNode() {
-    return _elements.contentNode || setElement('contentNode', '#content');
+    return (
+      elements._elements.contentNode ||
+      elements.setElement('contentNode', '#content')
+    );
   },
 };
 
 //
-// Global loading handlers. Starts and stops
-// full screen loading by setting the 'loading' attribute to body
-var loading = {
-  isLoading: () => elements.body.hasAttribute('loading'),
-  start: () =>
-    !loading.isLoading() && elements.body.setAttribute('loading', ''),
-  stop: () => loading.isLoading() && elements.body.removeAttribute('loading'),
+//
+var bodyAttribute = {
+  hasAttribute: attribute => elements.body.hasAttribute(attribute),
+
+  add: attribute =>
+    !bodyAttribute.hasAttribute(attribute) &&
+    elements.body.setAttribute(attribute, ''),
+
+  remove: attribute =>
+    bodyAttribute.hasAttribute(attribute) &&
+    elements.body.removeAttribute(attribute),
 };
 
-//
-// Fade content handlers. Starts and stops
-// content section fading by setting the 'fade' attribute to body
-var fadeContentNode = {
-  isLoading: () => elements.body.hasAttribute('fade'),
-  start: () =>
-    !fadeContentNode.isLoading() && elements.body.setAttribute('fade', ''),
-  stop: () =>
-    fadeContentNode.isLoading() && elements.body.removeAttribute('fade'),
-};
+const route = {
+  get path() {
+    return window.location.pathname;
+  },
 
-//
-// Get current path from window URL
-const getPath = () => window.location.pathname;
-
-//
-// Add new history entry and update the path
-const updatePath = path => {
-  const currentPath = getPath();
-  if (currentPath === path) {
-    return;
-  }
-  history.pushState('', path, path);
+  set path(path) {
+    if (route.path === path) {
+      return;
+    }
+    history.pushState('', path, path);
+  },
 };
 
 //
@@ -113,19 +117,9 @@ const createNodesFromHtml = html => {
 };
 
 //
-// Create full URL from path and append content folder and extension
-const createUrlFromPath = path => {
-  let newPath = stripLeadingSlash(path);
-  if (newPath === '') {
-    newPath = 'index';
-  }
-  return `${config.content.folder}/${newPath}.html`;
-};
-
-//
 // Fetch new content based on path and mount it in the DOM #content container
 async function goToRoutePath(path) {
-  const url = createUrlFromPath(path);
+  const url = utils.createUrlFromPath(path);
   const html = await getHtmlFromUrl(url).catch(err => {
     // CHECK STATUS HERE
     if (path !== '/404') {
@@ -135,21 +129,28 @@ async function goToRoutePath(path) {
   });
 
   if (!!html) {
-    fadeContentNode.start();
-    await wait(320);
+    // console.log(elements.contentNode.childNodes)
+    // const config = { attributes: true, childList: true, subtree: true };
+    // const observer = new MutationObserver((mutationList, observer) => {
+    //   console.log(elements.contentNode.childNodes)
+    //   console.log(Array.from(mutationList));
+    // })
+    // observer.observe(elements.contentNode, config);
+    bodyAttribute.add('fade');
+    await utils.wait(320);
     removeChildNodes(elements.contentNode);
     createNodesFromHtml(html).forEach(child =>
       addChildNode(elements.contentNode, child)
     );
-    updatePath(path);
-    fadeContentNode.stop();
+    route.path = path;
+    bodyAttribute.remove('fade');
   }
 }
 
 //
 // Fetch nav content and mount it in the DOM #nav container
 async function loadNav() {
-  const url = createUrlFromPath('/nav');
+  const url = utils.createUrlFromPath('/nav');
   const html = await getHtmlFromUrl(url).catch(err => {
     throw new Error(err);
   });
@@ -170,13 +171,13 @@ const setActiveLinksInNav = () => {
 
   const activeLinks = linkArray.filter(
     link =>
-      stripLeadingSlash(link.getAttribute('href')) ===
-      stripLeadingSlash(getPath())
+      utils.stripLeadingSlash(link.getAttribute('href')) ===
+      utils.stripLeadingSlash(route.path)
   );
   const inactiveLinks = linkArray.filter(
     link =>
-      stripLeadingSlash(link.getAttribute('href')) !==
-      stripLeadingSlash(getPath())
+      utils.stripLeadingSlash(link.getAttribute('href')) !==
+      utils.stripLeadingSlash(route.path)
   );
 
   activeLinks.forEach(link => {
@@ -193,8 +194,8 @@ const setActiveLinksInNav = () => {
 // read path from window URL and load content corresponding to that
 // also load nav content
 window.onload = () => {
-  Promise.all([goToRoutePath(getPath()), loadNav()]).then(() => {
-    loading.stop();
+  Promise.all([goToRoutePath(route.path), loadNav()]).then(() => {
+    bodyAttribute.remove('splash-loading');
     setActiveLinksInNav();
   });
 };
@@ -209,8 +210,9 @@ window.onclick = event => {
   }
 
   const path = event.target.getAttribute('href');
-  if (path && isRelativeUrl(path)) {
-    const newTab = (isMac() && event.metaKey) || (!isMac() && event.ctrlKey);
+  if (path && utils.isRelativeUrl(path)) {
+    const newTab =
+      (utils.isMac() && event.metaKey) || (!utils.isMac() && event.ctrlKey);
     const newWindow = event.shiftKey;
 
     if (newTab || newWindow) {
@@ -230,7 +232,7 @@ window.onclick = event => {
 // corresponding to the path
 window.onpopstate = event => {
   event.preventDefault();
-  goToRoutePath(getPath()).then(() => {
+  goToRoutePath(route.path).then(() => {
     setActiveLinksInNav();
   });
 };
