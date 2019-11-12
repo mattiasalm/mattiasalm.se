@@ -1,12 +1,18 @@
 :root {
-  --breakpoint-small-and-up: 480px;
-  --breakpoint-medium-and-up: 900px;
+  --color-body-background: #eb7055;
+  --color-body-text: #fff;
+  --color-nav-background: #1a2025;
+  --color-nav-text: #94a3af;
 }
 
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-body-background);
 }
 
 body,
@@ -22,6 +28,12 @@ ul {
   margin: 0;
   padding: 0;
   font-weight: normal;
+}
+
+body {
+  color: var(--color-body-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 }
 
 img {
@@ -41,7 +53,10 @@ a.active-link {
 }
 
 body #content {
-  transition: 320ms opacity ease-in-out;
+  transition: 160ms opacity ease-in-out;
+  padding: 1rem 2rem;
+  max-width: 40rem;
+  margin: 4rem auto;
 }
 
 body[fade] #content {

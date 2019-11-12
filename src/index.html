@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="sv-SE">
   <head>
-    <title>TITLE</title>
+    <title>mattiasalm.se</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
       :root {
-        --splash-loader-state-transition: 0.5s;
-        --splash-loader-dot-size: 40px;
-        --splash-loader-dot-color: #222;
-        --splash-loader-backdrop-color: #444;
-        --splash-loader-animation-duration: 0.5s;
-        --splash-loader-scale-start: 1;
-        --splash-loader-scale-end: 0.8;
+        --splash-loader-state-transition: 0.2s;
+        --splash-loader-backdrop-color: #1a2025;
+        --splash-loader-text-color: #94a3af;
+        --splash-loader-text-size: 2rem;
+        /* --splash-loader-caret-color: #bf5e0a; */
+        --splash-loader-caret-color: #eb7055;
+        --splash-loader-caret-width: 0.2rem;
+        --splash-loader-caret-adjust: 0.4rem;
+        --splash-loader-move-duration: 1.6s;
+        --splash-loader-move-delay: 0.6s;
+        --splash-loader-blink-duration: 1s;
+        --splash-loader-blink-delay: 2.2s;
       }
-      @keyframes pulse {
-        from {
-          transform: scale(var(--splash-loader-scale-start));
-        }
 
-        to {
-          transform: scale(var(--splash-loader-scale-end));
+      @keyframes move {
+        from {
+          transform: translateX(calc(1% - var(--splash-loader-caret-width)));
         }
+        to {
+          transform: translateX(calc(100% - var(--splash-loader-caret-width)));
+        }
+      }
+
+      @keyframes blink {
+        from,
+        to {
+          opacity: 0;
+          transform: translateX(calc(100% - var(--splash-loader-caret-width)));
+        }
+        50% {
+          opacity: 1;
+          transform: translateX(calc(100% - var(--splash-loader-caret-width)));
+        }
+      }
+
+      .font-mono {
+        font-family: 'Courier New', Courier, monospace;
       }
 
       #splash-loading {
-        content: '';
         background: var(--splash-loader-backdrop-color);
-        display: grid;
-        grid-template-columns:
-          auto var(--splash-loader-dot-size) var(--splash-loader-dot-size)
-          auto;
-        grid-template-rows: auto var(--splash-loader-dot-size) var(--splash-loader-dot-size) var(--splash-loader-dot-size) auto;
-        grid-gap: 4px;
         top: 0;
         left: 0;
         width: 100%;
@@ -44,49 +58,35 @@
         transition: var(--splash-loader-state-transition) opacity linear;
         z-index: 998;
         pointer-events: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       #splash-loading > div {
-        background: var(--splash-loader-dot-color);
+        color: var(--splash-loader-text-color);
         pointer-events: none;
-        border-radius: 999px;
-        transform-origin: center;
-        overflow: visible;
-        animation: var(--splash-loader-animation-duration) pulse paused alternate
-          infinite ease-in-out;
+        overflow: hidden;
+        position: relative;
+        font-size: var(--splash-loader-text-size);
+        padding-right: var(--splash-loader-caret-width);
+        transform: translateY(-4rem);
       }
 
-      #splash-loading > div:nth-child(1) {
-        animation-delay: 0s;
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-      }
-
-      #splash-loading > div:nth-child(2) {
-        animation-delay: var(--splash-loader-animation-duration);
-        grid-column: 3 / 4;
-        grid-row: 2 / 3;
-      }
-
-      #splash-loading > div:nth-child(3) {
-        animation-delay: var(--splash-loader-animation-duration);
-        grid-column: 2 / 3;
-        grid-row: 3 / 4;
-      }
-
-      #splash-loading > div:nth-child(4) {
-        animation-delay: 0s;
-        grid-column: 3 / 4;
-        grid-row: 3 / 4;
-      }
-
-      #splash-loading > div:nth-child(5) {
-        animation-play-state: paused;
-        grid-column: 2 / 4;
-        grid-row: 4 / 5;
-        text-align: center;
-        color: white;
-        background-color: transparent;
+      #splash-loading > div::after {
+        content: '';
+        position: absolute;
+        border-left: var(--splash-loader-caret-width) solid
+          var(--splash-loader-caret-color);
+        top: var(--splash-loader-caret-adjust);
+        bottom: var(--splash-loader-caret-adjust);
+        left: 0;
+        right: 0;
+        background: var(--splash-loader-backdrop-color);
+        animation: move var(--splash-loader-move-duration)
+            var(--splash-loader-move-delay) paused steps(13, start) forwards,
+          blink var(--splash-loader-blink-duration)
+            var(--splash-loader-blink-delay) step-end infinite;
       }
 
       body[splash-loading] {
@@ -98,23 +98,20 @@
         pointer-events: all;
       }
 
-      body[splash-loading] #splash-loading > div {
+      body[splash-loading] #splash-loading > div::after {
         animation-play-state: running;
       }
     </style>
 
     <link rel="stylesheet" href="styles/main.css" />
-    <script async type="text/javascript" src="scripts/main.js"></script>
   </head>
-  <body splash-loading fade>
+  <body splash-loading>
     <nav id="nav"></nav>
     <div id="content"></div>
     <div id="splash-loading">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div>LOADING</div>
+      <div class="font-mono">mattiasalm.se</div>
     </div>
+
+    <script async type="text/javascript" src="scripts/main.js"></script>
   </body>
 </html>

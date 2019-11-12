@@ -1,17 +1,17 @@
 :root {
-  --nav-menu-toggle-stroke-color: black;
+  --nav-menu-toggle-stroke-color: #fff;
   --nav-menu-toggle-container-color: transparent;
-  --nav-menu-toggle-stroke-height: 1rem;
-  --nav-menu-toggle-stroke-margin-top: -0.5rem; /* - half stroke height */
-  --nav-menu-toggle-stroke-border-radius: 1rem;
-  --nav-menu-toggle-stroke-spacing: 1.4rem;
-  --nav-menu-toggle-stroke-spacing-negative: -1.4rem;
-  --nav-menu-toggle-stroke-animation-duration: 320ms;
+  --nav-menu-toggle-stroke-height: 0.3rem;
+  --nav-menu-toggle-stroke-margin-top: -0.15rem; /* - half stroke height */
+  --nav-menu-toggle-stroke-border-radius: 0;
+  --nav-menu-toggle-stroke-spacing: 0.8rem;
+  --nav-menu-toggle-stroke-spacing-negative: -0.8rem;
+  --nav-menu-toggle-stroke-animation-duration: 0.2s;
   --nav-menu-toggle-stroke-animation-timing-function: ease-in-out;
-  --nav-menu-toggle-container-inner-size: 4rem;
-  --nav-menu-toggle-container-outer-size: 6rem; /* inner size + 2*padding */
-  --nav-menu-toggle-container-padding: 1rem;
-  --nav-menu-toggle-container-border-radius: 1rem;
+  --nav-menu-toggle-container-inner-size: 2.4rem;
+  --nav-menu-toggle-container-outer-size: 4.8rem; /* inner size + 2*padding */
+  --nav-menu-toggle-container-padding: 1.2rem;
+  --nav-menu-toggle-container-border-radius: 0;
 }
 
 @keyframes topStroke {
@@ -80,6 +80,7 @@
 }
 
 #menu {
+  position: relative;
 }
 
 #menu input,
@@ -88,11 +89,11 @@
   top: 0;
   right: 0;
   margin: 0;
+  width: var(--nav-menu-toggle-container-outer-size);
+  height: var(--nav-menu-toggle-container-outer-size);
 }
 
 #menu input {
-  width: var(--nav-menu-toggle-container-outer-size);
-  height: var(--nav-menu-toggle-container-outer-size);
   display: block;
   cursor: pointer;
   opacity: 0;
@@ -101,8 +102,6 @@
 }
 
 #menu-toggle {
-  width: var(--nav-menu-toggle-container-inner-size);
-  height: var(--nav-menu-toggle-container-inner-size);
   padding: var(--nav-menu-toggle-container-padding);
   background: var(--nav-menu-toggle-container-color);
   border-radius: var(--nav-menu-toggle-container-border-radius);
@@ -160,6 +159,30 @@
   animation-name: bottomStroke;
 }
 
+#menu-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: var(--nav-menu-toggle-container-outer-size) 1rem;
+  background: var(--color-nav-background);
+  color: var(--color-nav-text);
+  opacity: 0;
+  transition: 320ms transform ease-in-out, 160ms opacity ease-in-out;
+  transform: none;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#menu > input:checked ~ #menu-content {
+  opacity: 1;
+  transform: none;
+  pointer-events: all;
+}
+
 @media (min-width: 480px) {
   #menu-backdrop {
     position: fixed;
@@ -167,7 +190,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: palevioletred;
+    background: rgba(0, 0, 0, 0.1);
     opacity: 0;
     transition: 320ms opacity ease-in-out;
     cursor: pointer;
@@ -178,30 +201,38 @@
     opacity: 1;
     pointer-events: all;
   }
-}
 
-#menu-content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background: palegreen;
-  opacity: 0;
-  transition: 320ms opacity ease-in-out;
-  pointer-events: none;
-}
-
-#menu > input:checked ~ #menu-content {
-  opacity: 1;
-  pointer-events: all;
+  #menu-content {
+    width: 50%;
+    transform: translateX(100%);
+    transition-duration: 320ms;
+  }
 }
 
 #menu-content a {
+  font-size: 2rem;
+  color: var(--color-nav-text);
+  padding: 1rem;
+  display: block;
 }
 
 #menu-content a.active-link {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+#menu-content ul {
+  width: 100%;
+  max-width: 40rem;
+  text-align: center;
 }
 
 #menu-content li {
+  list-style: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+#menu-content li:first-child ~ li {
+  margin-top: 1rem;
 }

@@ -171,9 +171,19 @@ var hooks = {
   // read path from window URL and load content corresponding to that
   // also load nav content
   onLoad: () => {
+    // bodyAttribute.remove('splash-loading');
+    const timeStart = performance.now();
     Promise.all([load.content(route.path), load.nav()]).then(() => {
-      bodyAttribute.remove('splash-loading');
       utils.setActiveLinksInNav();
+      const timing = performance.now() - timeStart;
+      console.log(timing);
+      if (timing > 1000) {
+        bodyAttribute.remove('splash-loading');
+      } else {
+        setTimeout(() => {
+          bodyAttribute.remove('splash-loading');
+        }, 4000 - timing);
+      }
     });
   },
 
@@ -229,11 +239,11 @@ var load = {
     });
 
     if (!!html) {
-      bodyAttribute.add('fade');
-      await utils.wait(320);
+      // bodyAttribute.add('fade');
+      // await utils.wait(320);
       nodes.replaceNodesFromHtml(elements.contentNode, html);
       route.path = path;
-      bodyAttribute.remove('fade');
+      // bodyAttribute.remove('fade');
     }
   },
 
