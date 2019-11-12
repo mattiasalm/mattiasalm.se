@@ -176,7 +176,6 @@ var hooks = {
     Promise.all([load.content(route.path), load.nav()]).then(() => {
       utils.setActiveLinksInNav();
       const timing = performance.now() - timeStart;
-      console.log(timing);
       if (timing > 1000) {
         bodyAttribute.remove('splash-loading');
       } else {
