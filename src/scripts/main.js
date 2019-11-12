@@ -239,11 +239,11 @@ var load = {
     });
 
     if (!!html) {
-      // bodyAttribute.add('fade');
-      // await utils.wait(320);
+      bodyAttribute.add('fade');
+      await utils.wait(320);
       nodes.replaceNodesFromHtml(elements.contentNode, html);
       route.path = path;
-      // bodyAttribute.remove('fade');
+      bodyAttribute.remove('fade');
     }
   },
 

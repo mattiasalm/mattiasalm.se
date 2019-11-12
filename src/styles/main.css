@@ -13,6 +13,7 @@
 
 html {
   background-color: var(--color-body-background);
+  transition: 320ms background-color ease-in-out;
 }
 
 body,
@@ -53,7 +54,7 @@ a.active-link {
 }
 
 body #content {
-  transition: 160ms opacity ease-in-out;
+  transition: 320ms opacity ease-in-out;
   padding: 1rem 2rem;
   max-width: 40rem;
   margin: 4rem auto;
