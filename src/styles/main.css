@@ -3,6 +3,7 @@
   --color-body-text: #fff;
   --color-nav-background: #1a2025;
   --color-nav-text: #94a3af;
+  --focus-outline: 6px solid rgb(182, 38, 125);
 }
 
 *,
