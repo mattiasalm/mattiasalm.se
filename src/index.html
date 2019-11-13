@@ -44,7 +44,7 @@
       }
 
       .font-mono {
-        font-family: 'Courier New', Courier, monospace;
+        font-family: Courier, monospace;
       }
 
       #splash-loading {
@@ -105,6 +105,8 @@
     </style>
 
     <link rel="stylesheet" href="styles/main.css" />
+    <!-- <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"> -->
+    <script defer type="text/javascript" src="scripts/main.js"></script>
   </head>
   <body splash-loading>
     <nav id="nav"></nav>
@@ -112,7 +114,5 @@
     <div id="splash-loading">
       <div class="font-mono">mattiasalm.se</div>
     </div>
-
-    <script async type="text/javascript" src="scripts/main.js"></script>
   </body>
 </html>
