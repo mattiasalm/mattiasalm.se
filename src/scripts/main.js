@@ -51,7 +51,7 @@ var utils = {
   // Add class 'active-link' on all links in nav that match current path
   // and remove class on the others
   setActiveLinksInNav: () => {
-    const linkArray = Array.from(elements.nav.querySelectorAll('a'));
+    const linkArray = [...elements.nav.querySelectorAll('a')];
 
     // Set active
     linkArray
@@ -100,20 +100,6 @@ var elements = {
       elements.setElement('contentNode', '#content')
     );
   },
-};
-
-//
-//
-var bodyAttribute = {
-  hasAttribute: attribute => elements.body.hasAttribute(attribute),
-
-  add: attribute =>
-    !bodyAttribute.hasAttribute(attribute) &&
-    elements.body.setAttribute(attribute, ''),
-
-  remove: attribute =>
-    bodyAttribute.hasAttribute(attribute) &&
-    elements.body.removeAttribute(attribute),
 };
 
 var route = {
@@ -165,6 +151,44 @@ var nodes = {
   },
 };
 
+var load = {
+  //
+  // Fetch new content based on path and mount it in the DOM #content container
+  async content(path) {
+    const url = utils.createUrlFromPath(path);
+    const html = await utils.getHtmlFromUrl(url).catch(err => {
+      // CHECK STATUS HERE
+      if (path !== '/404') {
+        return load.content('/404');
+      }
+      throw new Error(err);
+    });
+    
+    if (!!html) {
+      elements.body.classList.add('fade');
+      // bodyAttribute.add('fade');
+      await utils.wait(320);
+      nodes.replaceNodesFromHtml(elements.contentNode, html);
+      route.path = path;
+      elements.body.classList.remove('fade');
+      // bodyAttribute.remove('fade');
+    }
+  },
+  
+  //
+  // Fetch nav content and mount it in the DOM #nav container
+  async nav() {
+    const url = utils.createUrlFromPath('/nav');
+    const html = await utils.getHtmlFromUrl(url).catch(err => {
+      throw new Error(err);
+    });
+
+    if (!!html) {
+      nodes.replaceNodesFromHtml(elements.nav, html);
+    }
+  },
+};
+
 var hooks = {
   //
   // On window load event (when all linked resources has been loaded)
@@ -177,10 +201,12 @@ var hooks = {
       utils.setActiveLinksInNav();
       const timing = performance.now() - timeStart;
       if (timing > 1000) {
-        bodyAttribute.remove('splash-loading');
+        elements.body.classList.remove('splash-loading');
+        // bodyAttribute.remove('splash-loading');
       } else {
         setTimeout(() => {
-          bodyAttribute.remove('splash-loading');
+          elements.body.classList.remove('splash-loading');
+          // bodyAttribute.remove('splash-loading');
         }, 4000 - timing);
       }
     });
@@ -221,42 +247,6 @@ var hooks = {
     load.content(route.path).then(() => {
       utils.setActiveLinksInNav();
     });
-  },
-};
-
-var load = {
-  //
-  // Fetch new content based on path and mount it in the DOM #content container
-  async content(path) {
-    const url = utils.createUrlFromPath(path);
-    const html = await utils.getHtmlFromUrl(url).catch(err => {
-      // CHECK STATUS HERE
-      if (path !== '/404') {
-        return load.content('/404');
-      }
-      throw new Error(err);
-    });
-
-    if (!!html) {
-      bodyAttribute.add('fade');
-      await utils.wait(320);
-      nodes.replaceNodesFromHtml(elements.contentNode, html);
-      route.path = path;
-      bodyAttribute.remove('fade');
-    }
-  },
-
-  //
-  // Fetch nav content and mount it in the DOM #nav container
-  async nav() {
-    const url = utils.createUrlFromPath('/nav');
-    const html = await utils.getHtmlFromUrl(url).catch(err => {
-      throw new Error(err);
-    });
-
-    if (!!html) {
-      nodes.replaceNodesFromHtml(elements.nav, html);
-    }
   },
 };
 

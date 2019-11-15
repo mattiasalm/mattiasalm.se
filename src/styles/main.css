@@ -61,7 +61,7 @@ body #content {
   margin: 4rem auto;
 }
 
-body[fade] #content {
+body.fade #content {
   overflow: hidden;
   opacity: 0;
 }
