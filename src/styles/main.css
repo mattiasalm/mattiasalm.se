@@ -4,6 +4,7 @@
   --color-nav-background: #1a2025;
   --color-nav-text: #94a3af;
   --focus-outline: 6px solid rgb(182, 38, 125);
+  --content-max-width: 40rem;
 }
 
 *,
@@ -57,7 +58,7 @@ a.active-link {
 body #content {
   transition: 320ms opacity ease-in-out;
   padding: 1rem 2rem;
-  max-width: 40rem;
+  max-width: var(--content-max-width);
   margin: 4rem auto;
 }
 

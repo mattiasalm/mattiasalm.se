@@ -195,18 +195,15 @@ var hooks = {
   // read path from window URL and load content corresponding to that
   // also load nav content
   onLoad: () => {
-    // bodyAttribute.remove('splash-loading');
     const timeStart = performance.now();
     Promise.all([load.content(route.path), load.nav()]).then(() => {
       utils.setActiveLinksInNav();
       const timing = performance.now() - timeStart;
       if (timing > 1000) {
         elements.body.classList.remove('splash-loading');
-        // bodyAttribute.remove('splash-loading');
       } else {
         setTimeout(() => {
           elements.body.classList.remove('splash-loading');
-          // bodyAttribute.remove('splash-loading');
         }, 4000 - timing);
       }
     });
