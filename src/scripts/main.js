@@ -214,6 +214,10 @@ var hooks = {
   // and prevent all relative link paths from reloading the page.
   // Load the new content in the #content container instead
   onclick: event => {
+    if (event.clientX && event.clientY) {
+      elements.body.classList.remove('keyboard-nav');
+    }
+
     if (!event.target.matches('a')) {
       return;
     }
@@ -245,8 +249,20 @@ var hooks = {
       utils.setActiveLinksInNav();
     });
   },
+
+  onkeyup: event => {
+    if (event.which === 9) {
+      elements.body.classList.add('keyboard-nav');
+    }
+
+    if (event.which === 27 && elements.nav.querySelector('input').checked) {
+      elements.nav.querySelector('input').checked = false;
+    }
+
+  }
 };
 
 window.onload = hooks.onLoad;
 window.onclick = hooks.onclick;
 window.onpopstate = hooks.onpopstate;
+window.onkeyup = hooks.onkeyup;

@@ -55,6 +55,16 @@ a.active-link {
   text-decoration: none;
 }
 
+a:hover,
+a:active,
+a:focus {
+  outline: none;
+}
+
+.keyboard-nav a:focus {
+  outline: var(--focus-outline);
+}
+
 body #content {
   transition: 320ms opacity ease-in-out;
   padding: 1rem 2rem;
