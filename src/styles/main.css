@@ -1,36 +1,49 @@
-:root {
-  --color-body-background: #eb7055;
-  --color-body-text: #fff;
-  --color-nav-background: #1a2025;
-  --color-nav-text: #94a3af;
-  --focus-outline: 6px solid rgb(182, 38, 125);
-  --content-max-width: 40rem;
-}
-
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
 
-html {
-  background-color: var(--color-body-background);
-  transition: 320ms background-color ease-in-out;
-}
-
+html,
 body,
 h1,
 h2,
 h3,
-h4,
-h5,
-h6,
 p,
 ol,
 ul {
   margin: 0;
   padding: 0;
   font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p {
+  line-height: 1.25rem;
+}
+
+html {
+  background-color: var(--color-body-background);
+  transition: var(--animation-transition-duration-long) background-color
+    var(--animation-timing-function);
 }
 
 body {
@@ -46,13 +59,12 @@ img {
 
 a {
   text-decoration: underline;
-  color: rebeccapurple;
+  color: var(--color-body-link-color);
   cursor: pointer;
 }
 
 a.active-link {
-  color: forestgreen;
-  text-decoration: none;
+  color: var(--color-body-link-color-active);
 }
 
 a:hover,
@@ -66,10 +78,11 @@ a:focus {
 }
 
 body #content {
-  transition: 320ms opacity ease-in-out;
+  transition: var(--animation-transition-duration-short) opacity
+    var(--animation-timing-function);
   padding: 1rem 2rem;
   max-width: var(--content-max-width);
-  margin: 4rem auto;
+  margin: var(--nav-menu-toggle-container-outer-size) auto;
 }
 
 body.fade #content {

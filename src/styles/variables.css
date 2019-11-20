@@ -1,0 +1,27 @@
+:root {
+  --color-body-background: #eb7055;
+  --color-body-text: #fff;
+  --color-body-link-color: rebeccapurple;
+  --color-body-link-color-active: forestgreen;
+  --color-nav-background: #202b31;
+  --color-nav-text: rgba(255, 255, 255, 0.5);
+  --color-nav-stroke-color: #fff;
+  --color-nav-container-color: transparent;
+
+  --focus-outline: 6px solid rgb(182, 38, 125);
+  --content-max-width: 45rem;
+  --animation-timing-function: ease-in-out;
+  --animation-transition-duration-long: 320ms;
+  --animation-transition-duration-short: 240ms;
+
+  --nav-menu-toggle-stroke-height: 0.3rem;
+  --nav-menu-toggle-stroke-margin-top: -0.15rem; /* - half stroke height */
+  --nav-menu-toggle-stroke-border-radius: 0;
+  --nav-menu-toggle-stroke-spacing: 0.8rem;
+  --nav-menu-toggle-stroke-spacing-negative: -0.8rem;
+  --nav-menu-toggle-container-inner-size: 2.4rem;
+  --nav-menu-toggle-container-outer-size: 5.2rem; /* inner size + 2*padding */
+  --nav-menu-toggle-container-padding: 1.4rem;
+  --nav-menu-toggle-container-border-radius: 0;
+  --nav-menu-toggle-stroke-animation-timing-function: ease-in-out;
+}
