@@ -199,12 +199,13 @@ var hooks = {
     Promise.all([load.content(route.path), load.nav()]).then(() => {
       utils.setActiveLinksInNav();
       const timing = performance.now() - timeStart;
-      if (timing > 1000) {
+      const splashMinDuration = 4000;
+      if (timing > splashMinDuration) {
         elements.body.classList.remove('splash-loading');
       } else {
         setTimeout(() => {
           elements.body.classList.remove('splash-loading');
-        }, 4000 - timing);
+        }, splashMinDuration - timing);
       }
     });
   },
