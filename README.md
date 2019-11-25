@@ -3,11 +3,11 @@
 
 ## Dependencies
 
-Install [superstatic](https://github.com/firebase/superstatic), [onchange](https://github.com/Qard/onchange), [terser](https://github.com/terser/terser) and [now](https://github.com/zeit/now) with `npm i -g superstatic onchange terser now postcss-cli autoprefixer cssnano postcss-css-variables postcss-syntax postcss postcss-html`.
+Install all dependencies with `zsh install.sh`.
 
 ## Serving
 
-To serve the from the `src` folder with onchange watching for the files run `zsh serve.sh`.
+To serve the from the `dist` folder with onchange watching for the files run `zsh serve.sh`.
 
 ## Building
 
