@@ -1,169 +1,23 @@
-"use strict";
-
-//
-// Config
-var config = {
-  content: {
-    folder: 'content',
-  },
-};
-
-var utils = {
-  //
-  // Async wait function
-  async wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  },
-
-  //
-  // Check if url is considered to be a relative path
-  isRelativeUrl: url => url.indexOf('://') < 1 && url.indexOf('//') !== 0,
-
-  //
-  // Remove leading slash in string
-  stripLeadingSlash: str => (str.indexOf('/') === 0 ? str.substring(1) : str),
-
-  //
-  // Check if is running on a Mac
-  isMac: () => window.navigator.appVersion.includes('Mac'),
-
-  //
-  // Create full URL from path and append content folder and extension
-  createUrlFromPath: path => {
-    let newPath = utils.stripLeadingSlash(path);
-    if (newPath === '') {
-      newPath = 'index';
-    }
-    return `${config.content.folder}/${newPath}.html`;
-  },
-
-  //
-  // Async fetch content from URL and return as text
-  async getHtmlFromUrl(url) {
-    const response = await fetch(url);
-    if (response.status >= 400 && response.status < 600) {
-      throw new Error('File not found');
-    }
-    return await response.text();
-  },
-
-  //
-  // Add class 'active-link' on all links in nav that match current path
-  // and remove class on the others
-  setActiveLinksInNav: () => {
-    const linkArray = [...elements.nav.querySelectorAll('a')];
-
-    // Set active
-    linkArray
-      .filter(
-        link =>
-          utils.stripLeadingSlash(link.getAttribute('href')) ===
-          utils.stripLeadingSlash(route.path)
-      )
-      .forEach(link => {
-        link.classList.add('active-link');
-      });
-
-    // Set inactive
-    linkArray
-      .filter(
-        link =>
-          utils.stripLeadingSlash(link.getAttribute('href')) !==
-          utils.stripLeadingSlash(route.path)
-      )
-      .forEach(link => {
-        link.classList.remove('active-link');
-      });
-  },
-};
-
-//
-// Getters to element references that also triggers to set the
-// reference if it is missing
-var elements = {
-  _elements: {},
-
-  setElement: (name, selector) =>
-    (elements._elements[name] = document.querySelector(selector)),
-
-  get body() {
-    return elements._elements.body || elements.setElement('body', 'body');
-  },
-
-  get nav() {
-    return elements._elements.nav || elements.setElement('nav', '#nav');
-  },
-
-  get contentNode() {
-    return (
-      elements._elements.contentNode ||
-      elements.setElement('contentNode', '#content')
-    );
-  },
-};
-
-var route = {
-  get path() {
-    return window.location.pathname;
-  },
-
-  set path(path) {
-    if (route.path === path) {
-      return;
-    }
-    history.pushState('', path, path);
-  },
-};
-
-var nodes = {
-  //
-  // Add child node to parent element
-  addChild: (parent, child) => parent.appendChild(child),
-
-  //
-  // Remove all child nodes in parent element
-  removeChildren: parent => {
-    while (parent.firstChild) {
-      parent.firstChild.remove();
-    }
-  },
-
-  //
-  // Create element nodes from HTML text string
-  createNodesFromHtml: html => {
-    const template = document.createElement('template');
-    template.innerHTML = html;
-    return template.content.childNodes;
-  },
-
-  replaceNodesFromHtml: (parent, html) => {
-    // console.log(elements.contentNode.childNodes)
-    // const config = { attributes: true, childList: true, subtree: true };
-    // const observer = new MutationObserver((mutationList, observer) => {
-    //   console.log(elements.contentNode.childNodes)
-    //   console.log(Array.from(mutationList));
-    // })
-    // observer.observe(elements.contentNode, config);
-    nodes.removeChildren(parent);
-    nodes
-      .createNodesFromHtml(html)
-      .forEach(child => nodes.addChild(parent, child));
-  },
-};
+import elements from './modules/elements';
+import utils from './modules/utils';
+import fetching from './modules/fetching';
+import modification from './modules/modification';
+import route from './modules/route';
+import nodes from './modules/nodes';
 
 var load = {
   //
   // Fetch new content based on path and mount it in the DOM #content container
   async content(path) {
     const url = utils.createUrlFromPath(path);
-    const html = await utils.getHtmlFromUrl(url).catch(err => {
+    const html = await fetching.getHtmlFromUrl(url).catch(err => {
       // CHECK STATUS HERE
       if (path !== '/404') {
         return load.content('/404');
       }
       throw new Error(err);
     });
-    
+
     if (!!html) {
       elements.body.classList.add('fade');
       // bodyAttribute.add('fade');
@@ -174,12 +28,12 @@ var load = {
       // bodyAttribute.remove('fade');
     }
   },
-  
+
   //
   // Fetch nav content and mount it in the DOM #nav container
   async nav() {
     const url = utils.createUrlFromPath('/nav');
-    const html = await utils.getHtmlFromUrl(url).catch(err => {
+    const html = await fetching.getHtmlFromUrl(url).catch(err => {
       throw new Error(err);
     });
 
@@ -197,7 +51,7 @@ var hooks = {
   onLoad: () => {
     const timeStart = performance.now();
     Promise.all([load.content(route.path), load.nav()]).then(() => {
-      utils.setActiveLinksInNav();
+      modification.setActiveLinks([...elements.nav.querySelectorAll('a')], route.path);
       const timing = performance.now() - timeStart;
       const splashMinDuration = 4000;
       if (timing > splashMinDuration) {
@@ -236,7 +90,7 @@ var hooks = {
       event.preventDefault();
       elements.nav.querySelector('input').checked = false;
       load.content(path).then(() => {
-        utils.setActiveLinksInNav();
+        modification.setActiveLinks([...elements.nav.querySelectorAll('a')], route.path);
       });
     }
   },
@@ -247,7 +101,7 @@ var hooks = {
   onpopstate: event => {
     event.preventDefault();
     load.content(route.path).then(() => {
-      utils.setActiveLinksInNav();
+      modification.setActiveLinks([...elements.nav.querySelectorAll('a')], route.path);
     });
   },
 
@@ -259,8 +113,7 @@ var hooks = {
     if (event.which === 27 && elements.nav.querySelector('input').checked) {
       elements.nav.querySelector('input').checked = false;
     }
-
-  }
+  },
 };
 
 window.onload = hooks.onLoad;
