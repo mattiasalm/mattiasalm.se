@@ -1,14 +1,12 @@
 
 
-export default {
-  get path() {
-    return window.location.pathname;
-  },
+const currentPath = () => window.location.pathname;
 
-  set path(newPath) {
-    if (window.location.pathname === newPath) {
-      return;
-    }
-    history.pushState('', newPath, newPath);
-  },
+const setNewPath = newPath => currentPath() === newPath
+  ? undefined
+  : history.pushState('', newPath, newPath);
+
+export default {
+  currentPath,
+  setNewPath,
 };

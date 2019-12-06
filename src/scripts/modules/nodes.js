@@ -18,21 +18,22 @@ const createNodesFromHtml = html => {
   return template.content.childNodes;
 };
 
+const replaceNodesFromHtml = (parent, html) => {
+  // console.log(elements.contentElem.childNodes)
+  // const config = { attributes: true, childList: true, subtree: true };
+  // const observer = new MutationObserver((mutationList, observer) => {
+  //   console.log(elements.contentElem.childNodes)
+  //   console.log(Array.from(mutationList));
+  // })
+  // observer.observe(elements.contentElem, config);
+  removeChildren(parent);
+  createNodesFromHtml(html)
+    .forEach(child => addChild(parent, child));
+};
+
 export default {
   removeChildren,
   addChild,
   createNodesFromHtml,
-
-  replaceNodesFromHtml: (parent, html) => {
-    // console.log(elements.contentNode.childNodes)
-    // const config = { attributes: true, childList: true, subtree: true };
-    // const observer = new MutationObserver((mutationList, observer) => {
-    //   console.log(elements.contentNode.childNodes)
-    //   console.log(Array.from(mutationList));
-    // })
-    // observer.observe(elements.contentNode, config);
-    removeChildren(parent);
-    createNodesFromHtml(html)
-      .forEach(child => addChild(parent, child));
-  },
+  replaceNodesFromHtml,
 };
