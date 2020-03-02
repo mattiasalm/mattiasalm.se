@@ -19,7 +19,7 @@
   "scripts": {
     "build": "rollup -c",
     "build:dev": "NODE_ENV=development rollup -c",
-    "deploy": "npm run build:prod && now --prod",
+    "deploy": "npm run build && now --prod",
     "install:global": "npm i -g superstatic onchange now",
     "serve": "NODE_ENV=development zsh serve.sh",
     "serve:prod": "zsh serve.sh",
