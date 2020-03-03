@@ -1,24 +1,24 @@
 //
 // Remove all child nodes in parent element
-const removeChildren = parent => {
-  while (parent.firstChild) {
+const removeChildren = (parent: Element) => {
+  while (parent && parent.firstChild) {
     parent.firstChild.remove();
   }
 };
 
 //
 // Add child node to parent element
-const addChild = (parent, child) => parent.appendChild(child);
+const addChild = (parent: Element, child: ChildNode) => parent.appendChild(child);
 
 //
 // Create element nodes from HTML text string
-const createNodesFromHtml = html => {
+const createNodesFromHtml = (html: string) => {
   const template = document.createElement('template');
   template.innerHTML = html;
   return template.content.childNodes;
 };
 
-const replaceNodesFromHtml = (parent, html) => {
+const replaceNodesFromHtml = (parent: Element, html: string) => {
   // console.log(elements.contentElem.childNodes)
   // const config = { attributes: true, childList: true, subtree: true };
   // const observer = new MutationObserver((mutationList, observer) => {
@@ -27,8 +27,7 @@ const replaceNodesFromHtml = (parent, html) => {
   // })
   // observer.observe(elements.contentElem, config);
   removeChildren(parent);
-  createNodesFromHtml(html)
-    .forEach(child => addChild(parent, child));
+  createNodesFromHtml(html).forEach(child => addChild(parent, child));
 };
 
 export default {

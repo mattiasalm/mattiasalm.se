@@ -1,13 +1,13 @@
-import utils from "./utils";
-import fetching from "./fetching";
-import elements from "./elements";
-import nodes from "./nodes";
-import route from "./route";
-import config from "./config";
+import utils from './utils';
+import fetching from './fetching';
+import elements from './elements';
+import nodes from './nodes';
+import route from './route';
+import config from './config';
 
 //
 // Fetch new content based on path and mount it in the DOM #content container
-const content = async path => {
+const content = async (path: string) => {
   const url = utils.createContentUrlFromPath(path);
   const html = await fetching.getHtmlFromUrl(url).catch(err => {
     // CHECK STATUS HERE
@@ -17,20 +17,18 @@ const content = async path => {
     throw new Error(err);
   });
 
-  if (!!html) {
-    if (config.content.loadingAddClass) {
+  if (!!html && elements.contentElem) {
+    if (!!config.content.loadingClassName && elements.bodyElem) {
       elements.bodyElem.classList.add(config.content.loadingClassName);
       if (config.content.loadingClassDelay > 0) {
         await utils.wait(config.content.loadingClassDelay);
       }
-    }
-    nodes.replaceNodesFromHtml(elements.contentElem, html);
-    route.setNewPath(path);
-    if (config.content.loadingAddClass) {
+      nodes.replaceNodesFromHtml(elements.contentElem, html);
+      route.setNewPath(path);
       elements.bodyElem.classList.remove(config.content.loadingClassName);
     }
   }
-}
+};
 
 //
 // Fetch nav content and mount it in the DOM #nav container
@@ -40,10 +38,10 @@ const nav = async () => {
     throw new Error(err);
   });
 
-  if (!!html) {
+  if (!!html && !!elements.navElem) {
     nodes.replaceNodesFromHtml(elements.navElem, html);
   }
-}
+};
 
 export default {
   content,

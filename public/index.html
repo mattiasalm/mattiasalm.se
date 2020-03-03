@@ -1,1 +1,120 @@
-<!DOCTYPE html> <html lang="sv-SE"> <head> <title>mattiasalm.se</title> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <meta name="Description" content="Personal website for Mattias Alm - contains resume."> <style>html{background:#202b31}@-webkit-keyframes move{from{transform:none}to{transform:translateX(100%)}}@keyframes move{from{transform:none}to{transform:translateX(100%)}}@-webkit-keyframes blink{from,to{opacity:0;transform:translateX(100%)}50%{opacity:1;transform:translateX(100%)}}@keyframes blink{from,to{opacity:0;transform:translateX(100%)}50%{opacity:1;transform:translateX(100%)}}.font-mono{font-family:Courier,monospace}#splash-loading{background:#202b31;top:0;left:0;width:100%;height:100%;opacity:0;overflow:visible;position:fixed;transition:240ms opacity linear;z-index:998;pointer-events:none;display:flex;justify-content:center;align-items:center}#splash-loading>div{color:rgba(255,255,255,.5);pointer-events:none;position:relative;font-size:2rem;transform:translateY(-4rem)}#splash-loading>div::after{content:'';position:absolute;border-left:.2rem solid #bf704a;top:0;bottom:0;left:0;right:0;background:#202b31;-webkit-animation:move 1.6s .4s paused steps(13,start) forwards,blink 1s 2s step-end infinite;animation:move 1.6s .4s paused steps(13,start) forwards,blink 1s 2s step-end infinite}body.splash-loading{overflow:hidden}body.splash-loading #splash-loading{opacity:1;pointer-events:all}body.splash-loading #splash-loading>div::after{-webkit-animation-play-state:running;animation-play-state:running}</style> <link rel="stylesheet" href="main.min.css"> </head> <body class="splash-loading"> <nav id="nav"></nav> <div id="content"></div> <div id="splash-loading"> <div class="font-mono">mattiasalm.se</div> </div> <script async src="main.min.js"></script> </body> </html>
+<!DOCTYPE html>
+<html lang="sv-SE">
+
+<head>
+  <title>mattiasalm.se</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="Description" content="Personal website for Mattias Alm - contains resume." />
+
+  <style>
+    :root {
+      --splash-loader-state-transition: 240ms;
+      --splash-loader-backdrop-color: #202b31;
+      --splash-loader-text-color: rgba(255, 255, 255, 0.5);
+      --splash-loader-text-size: 2rem;
+      --splash-loader-caret-color: #bf704a;
+      --splash-loader-caret-width: 0.2rem;
+      --splash-loader-move-duration: 1.6s;
+      --splash-loader-move-delay: 0.4s;
+      --splash-loader-blink-duration: 1s;
+      --splash-loader-blink-delay: 2.0s;
+    }
+
+    html {
+      background: var(--splash-loader-backdrop-color);
+    }
+
+    @keyframes move {
+      from {
+        transform: none;
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes blink {
+
+      from,
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(100%);
+      }
+    }
+
+    .font-mono {
+      font-family: Courier, monospace;
+    }
+
+    #splash-loading {
+      background: var(--splash-loader-backdrop-color);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      overflow: visible;
+      position: fixed;
+      transition: var(--splash-loader-state-transition) opacity linear;
+      z-index: 998;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #splash-loading>div {
+      color: var(--splash-loader-text-color);
+      pointer-events: none;
+      position: relative;
+      font-size: var(--splash-loader-text-size);
+      transform: translateY(-4rem);
+    }
+
+    #splash-loading>div::after {
+      content: '';
+      position: absolute;
+      border-left: var(--splash-loader-caret-width) solid var(--splash-loader-caret-color);
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--splash-loader-backdrop-color);
+      animation: move var(--splash-loader-move-duration) var(--splash-loader-move-delay) paused steps(13, start) forwards,
+        blink var(--splash-loader-blink-duration) var(--splash-loader-blink-delay) step-end infinite;
+    }
+
+    body.splash-loading {
+      overflow: hidden;
+    }
+
+    body.splash-loading #splash-loading {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    body.splash-loading #splash-loading>div::after {
+      animation-play-state: running;
+    }
+  </style>
+
+  <link rel="stylesheet" href="main.min.css" />
+</head>
+
+<body class="splash-loading">
+  <nav id="nav"></nav>
+  <div id="content"></div>
+  <div id="splash-loading">
+    <div class="font-mono">mattiasalm.se</div>
+  </div>
+  <script async src="main.min.js"></script>
+</body>
+
+</html>

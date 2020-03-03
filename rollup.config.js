@@ -7,6 +7,7 @@ import postcssVariables from 'postcss-css-variables';
 import clean from 'postcss-clean';
 import CleanCSS from 'clean-css';
 import copy from 'rollup-plugin-copy';
+import typescript from 'rollup-plugin-typescript2';
 import { minify } from 'html-minifier-terser';
 
 const developmentMode = process.env.NODE_ENV === 'development';
@@ -38,7 +39,7 @@ const copyTransform = contents => {
 }
 
 export default {
-  input: './src/main.js',
+  input: './src/main.ts',
   output: {
     file: './public/main.min.js',
     format: 'iife',
@@ -64,6 +65,9 @@ export default {
         !developmentMode && postcssVariables(),
         !developmentMode && clean(),
       ],
+    }),
+    typescript({
+      abortOnError: false,
     }),
     !developmentMode && terser({
       compress: {

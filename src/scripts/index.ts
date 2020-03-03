@@ -1,4 +1,4 @@
-import hooks from "./modules/hooks";
+import hooks from './modules/hooks';
 
 window.onload = hooks.onLoad;
 window.onclick = hooks.onClick;
