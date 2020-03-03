@@ -2,7 +2,6 @@ import { terser } from 'rollup-plugin-terser';
 import rollupPostcss from 'rollup-plugin-postcss';
 import postcss from 'postcss';
 import atImport from 'postcss-import';
-import execute from 'rollup-plugin-execute';
 import autoprefixer from 'autoprefixer';
 import postcssVariables from 'postcss-css-variables';
 import clean from 'postcss-clean';
@@ -46,7 +45,6 @@ export default {
     format: 'iife',
   },
   plugins: [
-    // execute(),
     copy({
       targets: [
         {

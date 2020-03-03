@@ -14,7 +14,6 @@
     "prettier": "^1.19.1",
     "rollup": "^1.32.0",
     "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-execute": "^1.1.1",
     "rollup-plugin-postcss": "^2.1.1",
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",
@@ -23,8 +22,8 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "rollup -c",
-    "build:dev": "NODE_ENV=development rollup -c",
+    "build": "rm -rf public/ && rollup -c",
+    "build:dev": "NODE_ENV=development npm run build",
     "deploy": "npm run build && now --prod",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
