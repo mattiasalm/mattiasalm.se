@@ -2,6 +2,7 @@ import { terser } from 'rollup-plugin-terser';
 import rollupPostcss from 'rollup-plugin-postcss';
 import postcss from 'postcss';
 import atImport from 'postcss-import';
+import execute from 'rollup-plugin-execute';
 import autoprefixer from 'autoprefixer';
 import postcssVariables from 'postcss-css-variables';
 import clean from 'postcss-clean';
@@ -20,23 +21,23 @@ const copyTransform = contents => {
   const processOptions = {
     from: undefined,
     map: false,
-  }
+  };
 
   const htmlMinifyOptions = {
     collapseInlineTagWhitespace: true,
     collapseWhitespace: true,
     conservativeCollapse: true,
     minifyCSS: text => {
-      const processed = postcss([
-        autoprefixer,
-        postcssVariables
-      ]).process(text, processOptions).css;
-      return new CleanCSS().minify(processed).styles
+      const processed = postcss([autoprefixer, postcssVariables]).process(
+        text,
+        processOptions,
+      ).css;
+      return new CleanCSS().minify(processed).styles;
     },
-  }
+  };
 
   return minify(contents.toString(), htmlMinifyOptions);
-}
+};
 
 export default {
   input: './src/main.ts',
@@ -45,16 +46,15 @@ export default {
     format: 'iife',
   },
   plugins: [
+    // execute(),
     copy({
       targets: [
-        { src: 'src/content/**/*',
+        {
+          src: 'src/content/**/*',
           dest: 'public/content',
           transform: copyTransform,
         },
-        { src: 'src/index.html',
-          dest: 'public',
-          transform: copyTransform,
-        }
+        { src: 'src/index.html', dest: 'public', transform: copyTransform },
       ],
     }),
     rollupPostcss({
@@ -68,16 +68,18 @@ export default {
     }),
     typescript({
       abortOnError: false,
+      clean: true,
     }),
-    !developmentMode && terser({
-      compress: {
-        module: true,
-      },
-      mangle: {
-        properties: {
-          keep_quoted: true,
+    !developmentMode &&
+      terser({
+        compress: {
+          module: true,
         },
-      },
-    }),
+        mangle: {
+          properties: {
+            keep_quoted: true,
+          },
+        },
+      }),
   ],
 };

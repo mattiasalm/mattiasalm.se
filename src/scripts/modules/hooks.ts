@@ -1,27 +1,8 @@
 import elements from './elements';
 import utils from './utils';
-import modification from './modification';
-import route from './route';
 import load from './load';
-
-const closeNavMenu = () => {
-  if (!!elements.navElem) {
-    const inputElem = elements.navElem.querySelector('input');
-    if (!!inputElem && inputElem.checked) {
-      inputElem.checked = false;
-    }
-  }
-};
-
-const updateActiveLinksInNav = () => {
-  if (!!elements.navElem) {
-    const linkElements = elements.navElem.querySelectorAll('a');
-    modification.setActiveLinks(
-      [...Array.from(linkElements)],
-      route.currentPath(),
-    );
-  }
-};
+import config from './config';
+import navigation from './navigation';
 
 //
 // On window load event (when all linked resources has been loaded)
@@ -29,22 +10,9 @@ const updateActiveLinksInNav = () => {
 // also load nav content
 const onLoad = () => {
   const timeStart = performance.now();
-  Promise.all([load.content(route.currentPath()), load.nav()]).then(() => {
-    updateActiveLinksInNav();
-    const timing = performance.now() - timeStart;
-
-    const splashMinDuration = 4000;
-    if (timing > splashMinDuration) {
-      if (!!elements.bodyElem) {
-        elements.bodyElem.classList.remove('splash-loading');
-      }
-    } else {
-      setTimeout(() => {
-        if (!!elements.bodyElem) {
-          elements.bodyElem.classList.remove('splash-loading');
-        }
-      }, splashMinDuration - timing);
-    }
+  Promise.all([load.content(navigation.currentPath()), load.nav()]).then(() => {
+    navigation.updateActiveLinksInMenu();
+    utils.hideSplashLoading(performance.now() - timeStart);
   });
 };
 
@@ -54,8 +22,10 @@ const onLoad = () => {
 // Load the new content in the #content container instead
 const onClick = (event: MouseEvent) => {
   // Turn of keyboard navigation highlight
-  if (event.clientX && event.clientY && elements.bodyElem) {
-    elements.bodyElem.classList.remove('keyboard-nav');
+  if (event.clientX && event.clientY && elements.bodyElem instanceof Element) {
+    elements.bodyElem.classList.remove(
+      config.general.keyboardNavigationClassName,
+    );
   }
 
   if (event.target instanceof Element) {
@@ -80,10 +50,8 @@ const onClick = (event: MouseEvent) => {
 
       // Load new content based on relative link path
       event.preventDefault();
-      load.content(path).then(() => {
-        updateActiveLinksInNav();
-        closeNavMenu();
-      });
+      navigation.closeMenu();
+      load.content(path).then(() => navigation.updateActiveLinksInMenu());
     }
   }
 };
@@ -93,21 +61,21 @@ const onClick = (event: MouseEvent) => {
 // corresponding to the path
 const onPopState = (event: PopStateEvent) => {
   event.preventDefault();
-  load.content(route.currentPath()).then(() => {
-    updateActiveLinksInNav();
-    closeNavMenu();
-  });
+  navigation.closeMenu();
+  load
+    .content(navigation.currentPath())
+    .then(() => navigation.updateActiveLinksInMenu());
 };
 
 const onKeyUp = (event: KeyboardEvent) => {
   // If using TAB key to navigate; enable keyboard navigation highlight by adding classname to body
   if (event.which === 9 && !!elements.bodyElem) {
-    elements.bodyElem.classList.add('keyboard-nav');
+    elements.bodyElem.classList.add(config.general.keyboardNavigationClassName);
   }
 
   // Close the menu by pressing ESC if it is open
   if (event.which === 27) {
-    closeNavMenu();
+    navigation.closeMenu();
   }
 };
 

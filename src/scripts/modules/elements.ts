@@ -1,3 +1,5 @@
+import config from './config';
+
 interface ElementReferences {
   [key: string]: Element;
 }
@@ -16,15 +18,15 @@ export interface GetElementReference {
 
 const getElementReference: GetElementReference = {
   get bodyElem() {
-    return _elements.bodyElem || _setElement('bodyElem', 'body');
+    return _elements.bodyElem || _setElement('bodyElem', config.selectors.body);
   },
 
   get navElem() {
-    return _elements.navElem || _setElement('navElem', '#nav');
+    return _elements.navElem || _setElement('navElem', config.selectors.nav);
   },
 
   get contentElem() {
-    return _elements.contentElem || _setElement('contentElem', '#content');
+    return _elements.contentElem || _setElement('contentElem', config.selectors.content);
   },
 };
 
