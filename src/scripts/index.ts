@@ -1,3 +1,4 @@
+export { setConfig, Config } from './modules/config';
 import hooks from './modules/hooks';
 
 window.onload = hooks.onLoad;

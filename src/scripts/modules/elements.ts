@@ -18,15 +18,15 @@ export interface GetElementReference {
 
 const getElementReference: GetElementReference = {
   get bodyElem() {
-    return _elements.bodyElem || _setElement('bodyElem', config.selectors.body);
+    return _elements.bodyElem || _setElement('bodyElem', config.bodySelector);
   },
 
   get navElem() {
-    return _elements.navElem || _setElement('navElem', config.selectors.nav);
+    return _elements.navElem || _setElement('navElem', config.navSelector);
   },
 
   get contentElem() {
-    return _elements.contentElem || _setElement('contentElem', config.selectors.content);
+    return _elements.contentElem || _setElement('contentElem', config.contentSelector);
   },
 };
 

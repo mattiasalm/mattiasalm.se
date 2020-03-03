@@ -10,21 +10,21 @@ const content = async (path: string) => {
   const url = utils.createContentUrlFromPath(path);
   const html = await utils.getHtmlFromUrl(url).catch(err => {
     // CHECK STATUS HERE
-    if (path !== config.content.fileNotFoundPath) {
-      return content(config.content.fileNotFoundPath);
+    if (path !== config.fileNotFoundPath) {
+      return content(config.fileNotFoundPath);
     }
     throw new Error(err);
   });
 
   if (!!html && elements.contentElem) {
-    if (!!config.loading.pageLoadClassName && elements.bodyElem) {
-      elements.bodyElem.classList.add(config.loading.pageLoadClassName);
-      if (config.loading.pageLoadDuration > 0) {
-        await utils.wait(config.loading.pageLoadDuration);
+    if (!!config.pageLoadClassName && elements.bodyElem) {
+      elements.bodyElem.classList.add(config.pageLoadClassName);
+      if (config.pageLoadDuration > 0) {
+        await utils.wait(config.pageLoadDuration);
       }
       nodes.replaceNodesFromHtmlString(elements.contentElem, html);
       navigation.setNewPath(path);
-      elements.bodyElem.classList.remove(config.loading.pageLoadClassName);
+      elements.bodyElem.classList.remove(config.pageLoadClassName);
     }
   }
 };
@@ -32,7 +32,7 @@ const content = async (path: string) => {
 //
 // Fetch nav content and mount it in the DOM #nav container
 const nav = async () => {
-  const url = utils.createContentUrlFromPath(config.content.navContentPath);
+  const url = utils.createContentUrlFromPath(config.navContentPath);
   const html = await utils.getHtmlFromUrl(url).catch(err => {
     throw new Error(err);
   });

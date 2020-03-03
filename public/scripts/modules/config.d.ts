@@ -1,32 +1,18 @@
-export interface ConfigContent {
+export interface Config {
     fileNotFoundPath: string;
-    folder: string;
+    contentDirectory: string;
     navContentPath: string;
     slashFallbackPath: string;
-}
-export interface ConfigLinks {
-    activeClass: string;
-}
-export interface ConfigSelectors {
-    body: string;
-    content: string;
-    nav: string;
-}
-export interface ConfigLoading {
+    activeLinkClass: string;
+    keyboardNavigationClassName: string;
     pageLoadClassName: string;
     pageLoadDuration: number;
     splashLoadClassName: string;
     splashLoadDuration: number;
+    bodySelector: string;
+    contentSelector: string;
+    navSelector: string;
 }
-export interface ConfigGeneral {
-    keyboardNavigationClassName: string;
-}
-export interface Config {
-    general: ConfigGeneral;
-    content: ConfigContent;
-    links: ConfigLinks;
-    selectors: ConfigSelectors;
-    loading: ConfigLoading;
-}
-declare const config: Config;
+declare let config: Config;
+export declare const setConfig: (newConfig: Partial<Config>) => Config;
 export default config;

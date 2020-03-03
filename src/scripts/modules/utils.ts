@@ -22,9 +22,9 @@ const isMac = (): boolean => window.navigator.appVersion.includes('Mac');
 const createContentUrlFromPath = (path: string): string => {
   let newPath = stripLeadingSlash(path);
   if (newPath === '') {
-    newPath = config.content.slashFallbackPath;
+    newPath = config.slashFallbackPath;
   }
-  return `${config.content.folder}/${newPath}.html`;
+  return `${config.contentDirectory}/${newPath}.html`;
 };
 
 //
@@ -47,7 +47,7 @@ const setActiveLinks = (parent: Element, currentPath: string) => {
           stripLeadingSlash(currentPath),
     )
     .forEach(link => {
-      link.classList.add(config.links.activeClass);
+      link.classList.add(config.activeLinkClass);
     });
 
   // Set inactive
@@ -59,21 +59,21 @@ const setActiveLinks = (parent: Element, currentPath: string) => {
           stripLeadingSlash(currentPath),
     )
     .forEach(link => {
-      link.classList.remove(config.links.activeClass);
+      link.classList.remove(config.activeLinkClass);
     });
 };
 
 const hideSplashLoading = (loadingTime: number) => {
-  if (loadingTime > config.loading.splashLoadDuration) {
+  if (loadingTime > config.splashLoadDuration) {
     if (!!elements.bodyElem) {
-      elements.bodyElem.classList.remove(config.loading.splashLoadClassName);
+      elements.bodyElem.classList.remove(config.splashLoadClassName);
     }
   } else {
     setTimeout(() => {
       if (!!elements.bodyElem) {
-        elements.bodyElem.classList.remove(config.loading.splashLoadClassName);
+        elements.bodyElem.classList.remove(config.splashLoadClassName);
       }
-    }, config.loading.splashLoadDuration - loadingTime);
+    }, config.splashLoadDuration - loadingTime);
   }
 };
 

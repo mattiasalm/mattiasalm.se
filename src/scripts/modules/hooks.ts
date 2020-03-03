@@ -24,7 +24,7 @@ const onClick = (event: MouseEvent) => {
   // Turn of keyboard navigation highlight
   if (event.clientX && event.clientY && elements.bodyElem instanceof Element) {
     elements.bodyElem.classList.remove(
-      config.general.keyboardNavigationClassName,
+      config.keyboardNavigationClassName,
     );
   }
 
@@ -70,7 +70,7 @@ const onPopState = (event: PopStateEvent) => {
 const onKeyUp = (event: KeyboardEvent) => {
   // If using TAB key to navigate; enable keyboard navigation highlight by adding classname to body
   if (event.which === 9 && !!elements.bodyElem) {
-    elements.bodyElem.classList.add(config.general.keyboardNavigationClassName);
+    elements.bodyElem.classList.add(config.keyboardNavigationClassName);
   }
 
   // Close the menu by pressing ESC if it is open
