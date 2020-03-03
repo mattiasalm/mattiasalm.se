@@ -8,7 +8,8 @@ const removeChildren = (parent: Element) => {
 
 //
 // Add child node to parent element
-const addChild = (parent: Element, child: ChildNode) => parent.appendChild(child);
+const addChild = (parent: Element, child: ChildNode) =>
+  parent.appendChild(child);
 
 //
 // Create element nodes from HTML text string
