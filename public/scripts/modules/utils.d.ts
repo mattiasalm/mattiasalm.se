@@ -1,11 +1,10 @@
-declare const _default: {
-    stripLeadingSlash: (str: string) => string;
-    wait: (ms: number) => Promise<unknown>;
-    isRelativeUrl: (url: string) => boolean;
-    isMac: () => boolean;
-    createContentUrlFromPath: (path: string) => string;
-    setActiveLinks: (parent: Element, currentPath: string) => void;
-    hideSplashLoading: (loadingTime: number) => void;
-    getHtmlFromUrl: (url: string) => Promise<string>;
-};
-export default _default;
+export declare const stripLeadingSlash: (str: string) => string;
+export declare const wait: (ms: number) => Promise<unknown>;
+export declare const isRelativeUrl: (url: string) => boolean;
+export declare const isMac: () => boolean;
+export declare const createContentUrlFromPath: (path: string) => string;
+export declare const setActiveLinks: (parent: Element, currentPath: string) => void;
+export declare const hideSplashLoading: (loadingTime: number) => void;
+export declare const removeClassFromElement: (element: Element | null, className: string) => void;
+export declare const addClassFromElement: (element: Element | null, className: string) => void;
+export declare const getHtmlFromUrl: (url: string) => Promise<string>;

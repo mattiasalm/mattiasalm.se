@@ -1,40 +1,40 @@
 export interface Config {
-  fileNotFoundPath: string;
-  contentDirectory: string;
-  navContentPath: string;
-  slashFallbackPath: string;
-  activeLinkClass: string;
-  keyboardNavigationClassName: string;
-  pageLoadClassName: string;
-  pageLoadDuration: number;
-  splashLoadClassName: string;
-  splashLoadDuration: number;
-  bodySelector: string;
-  contentSelector: string;
-  navSelector: string;
+  classNameActiveLinkInNavigation: string;
+  classNameKeyboardNavigationActive: string;
+  classNamePageTransition: string;
+  classNameRemovalDelayPageTransition: number;
+  classNameRemovalDelaySplashLoading: number;
+  classNameSplashLoading: string;
+  directoryContent: string;
+  domSelectorBody: string;
+  domSelectorContent: string;
+  domSelectorNavigation: string;
+  pathFileNotFound: string;
+  pathToIndexContent: string;
+  pathToNavigationContent: string;
+  loadIndexContentOnLoad: boolean;
 }
 
 const defaultConfig: Config = {
-  keyboardNavigationClassName: 'keyboard-nav',
-  fileNotFoundPath: '/404',
-  contentDirectory: 'content',
-  navContentPath: '/nav',
-  slashFallbackPath: '/index', // the path to use as fallback for links with path '/'
-  pageLoadClassName: 'fade',
-  pageLoadDuration: 320,
-  splashLoadClassName: 'splash-loading',
-  splashLoadDuration: 4000,
-  activeLinkClass: 'active-link',
-  bodySelector: 'body',
-  contentSelector: '#content',
-  navSelector: '#nav',
+  classNameActiveLinkInNavigation: 'active-link',
+  classNameKeyboardNavigationActive: 'keyboard-nav',
+  classNamePageTransition: '',
+  classNameRemovalDelayPageTransition: 0,
+  classNameRemovalDelaySplashLoading: 0,
+  classNameSplashLoading: '',
+  directoryContent: 'content',
+  domSelectorBody: 'body',
+  domSelectorContent: '#content',
+  domSelectorNavigation: '#nav',
+  pathFileNotFound: '/404',
+  pathToIndexContent: '/index', // the content to use for path '/'
+  pathToNavigationContent: '', // empty to not load anything dynamically
+  loadIndexContentOnLoad: false,
 };
 
-let config: Config = {
+export let config: Config = {
   ...defaultConfig,
 };
 
 export const setConfig = (newConfig: Partial<Config>): Config =>
   (config = Object.assign(config, newConfig));
-
-export default config;

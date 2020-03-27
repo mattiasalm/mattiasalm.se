@@ -1,7 +1,8 @@
-export { setConfig, Config } from './modules/config';
-import hooks from './modules/hooks';
+import { onLoad, onClick, onPopState, onKeyUp } from './modules/hooks';
 
-window.onload = hooks.onLoad;
-window.onclick = hooks.onClick;
-window.onpopstate = hooks.onPopState;
-window.onkeyup = hooks.onKeyUp;
+export { setConfig, Config } from './modules/config';
+
+window.onload = onLoad;
+window.onclick = onClick;
+window.onpopstate = onPopState;
+window.onkeyup = onKeyUp;

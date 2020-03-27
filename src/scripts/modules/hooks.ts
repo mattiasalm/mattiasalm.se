@@ -1,8 +1,18 @@
-import elements from './elements';
-import utils from './utils';
-import load from './load';
-import config from './config';
-import navigation from './navigation';
+import {
+  removeClassFromElement,
+  addClassFromElement,
+  hideSplashLoading,
+  isRelativeUrl,
+  isMac,
+} from './utils';
+import { loadContent, loadNavigation } from './load';
+import {
+  currentPath,
+  setActiveLinksInNavigation,
+  closeNavigation,
+} from './navigation';
+import { config } from './config';
+import { elementReference } from './elements';
 
 //
 // On window load event (when all linked resources has been loaded)
@@ -10,9 +20,16 @@ import navigation from './navigation';
 // also load nav content
 const onLoad = () => {
   const timeStart = performance.now();
-  Promise.all([load.content(navigation.currentPath()), load.nav()]).then(() => {
-    navigation.updateActiveLinksInMenu();
-    utils.hideSplashLoading(performance.now() - timeStart);
+  let contentToLoad: Promise<any>[] = [loadNavigation()];
+
+  if (currentPath() !== '/' || config.loadIndexContentOnLoad) {
+    console.log(currentPath())
+    contentToLoad = [...contentToLoad, loadContent(currentPath())];
+  }
+
+  Promise.all(contentToLoad).then(() => {
+    setActiveLinksInNavigation();
+    hideSplashLoading(performance.now() - timeStart);
   });
 };
 
@@ -22,9 +39,10 @@ const onLoad = () => {
 // Load the new content in the #content container instead
 const onClick = (event: MouseEvent) => {
   // Turn of keyboard navigation highlight
-  if (event.clientX && event.clientY && elements.bodyElem instanceof Element) {
-    elements.bodyElem.classList.remove(
-      config.keyboardNavigationClassName,
+  if (event.clientX && event.clientY) {
+    removeClassFromElement(
+      elementReference.body,
+      config.classNameKeyboardNavigationActive,
     );
   }
 
@@ -38,10 +56,10 @@ const onClick = (event: MouseEvent) => {
 
     // Check if the path is relative to this site
     const path = clickedElement.getAttribute('href');
-    if (!!path && utils.isRelativeUrl(path)) {
+    if (!!path && isRelativeUrl(path)) {
       // Check if the link target is intended to be opened in a new tab or window.
       const newTab =
-        (utils.isMac() && event.metaKey) || (!utils.isMac() && event.ctrlKey);
+        (isMac() && event.metaKey) || (!isMac() && event.ctrlKey);
       const newWindow = event.shiftKey;
 
       if (newTab || newWindow) {
@@ -50,8 +68,8 @@ const onClick = (event: MouseEvent) => {
 
       // Load new content based on relative link path
       event.preventDefault();
-      navigation.closeMenu();
-      load.content(path).then(() => navigation.updateActiveLinksInMenu());
+      closeNavigation();
+      loadContent(path).then(() => setActiveLinksInNavigation());
     }
   }
 };
@@ -61,27 +79,23 @@ const onClick = (event: MouseEvent) => {
 // corresponding to the path
 const onPopState = (event: PopStateEvent) => {
   event.preventDefault();
-  navigation.closeMenu();
-  load
-    .content(navigation.currentPath())
-    .then(() => navigation.updateActiveLinksInMenu());
+  closeNavigation();
+  loadContent(currentPath()).then(() => setActiveLinksInNavigation());
 };
 
 const onKeyUp = (event: KeyboardEvent) => {
-  // If using TAB key to navigate; enable keyboard navigation highlight by adding classname to body
-  if (event.which === 9 && !!elements.bodyElem) {
-    elements.bodyElem.classList.add(config.keyboardNavigationClassName);
+  // If using TAB key to navigate; enable keyboard navigation classname to body
+  if (event.which === 9) {
+    addClassFromElement(
+      elementReference.body,
+      config.classNameKeyboardNavigationActive,
+    );
   }
 
   // Close the menu by pressing ESC if it is open
   if (event.which === 27) {
-    navigation.closeMenu();
+    closeNavigation();
   }
 };
 
-export default {
-  onLoad,
-  onClick,
-  onPopState,
-  onKeyUp,
-};
+export { onLoad, onClick, onPopState, onKeyUp };

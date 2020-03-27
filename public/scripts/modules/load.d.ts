@@ -1,5 +1,2 @@
-declare const _default: {
-    content: (path: string) => Promise<void>;
-    nav: () => Promise<void>;
-};
-export default _default;
+export declare const loadContent: (path: string) => Promise<void>;
+export declare const loadNavigation: () => Promise<void>;

@@ -1,7 +1,6 @@
-export interface GetElementReference {
-    bodyElem: Element | null;
-    navElem: Element | null;
-    contentElem: Element | null;
+export interface ElementReference {
+    body: Element | null;
+    navigation: Element | null;
+    content: Element | null;
 }
-declare const getElementReference: GetElementReference;
-export default getElementReference;
+export declare const elementReference: ElementReference;

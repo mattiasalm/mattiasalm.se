@@ -9,12 +9,35 @@ import CleanCSS from 'clean-css';
 import copy from 'rollup-plugin-copy';
 import typescript from 'rollup-plugin-typescript2';
 import { minify } from 'html-minifier-terser';
+import * as fs from 'fs';
 
 const developmentMode = process.env.NODE_ENV === 'development';
+const outputFileName = 'main.min';
 
 const copyTransform = contents => {
+  let htmlContent = contents.toString();
+
+  htmlContent = htmlContent.replace(
+    '##__CSS__##',
+    `${outputFileName}.css`,
+  );
+  htmlContent = htmlContent.replace('##__JS__##', `${outputFileName}.js`);
+
+  const includeFiles = htmlContent.match(/(?<=##__INCLUDE:).+(?=__##)/gm);
+  if (!!includeFiles && includeFiles.length > 0) {
+    includeFiles.forEach(fileName => {
+      const fileContent = fs.readFileSync(`src/${fileName}`, 'utf8');
+      const replaceRegEx = new RegExp(
+        `##__INCLUDE:${fileName
+          .replace('/', '\\/')
+          .replace('.', '\\.')}__##`,
+      );
+      htmlContent = htmlContent.replace(replaceRegEx, fileContent);
+    });
+  }
+
   if (developmentMode) {
-    return contents.toString();
+    return htmlContent;
   }
 
   const processOptions = {
@@ -35,13 +58,13 @@ const copyTransform = contents => {
     },
   };
 
-  return minify(contents.toString(), htmlMinifyOptions);
+  return minify(htmlContent, htmlMinifyOptions);
 };
 
 export default {
   input: './src/main.ts',
   output: {
-    file: './public/main.min.js',
+    file: `./public/${outputFileName}.js`,
     format: 'iife',
   },
   plugins: [
@@ -52,7 +75,11 @@ export default {
           dest: 'public/content',
           transform: copyTransform,
         },
-        { src: 'src/index.html', dest: 'public', transform: copyTransform },
+        {
+          src: 'src/index.html',
+          dest: 'public',
+          transform: copyTransform,
+        },
       ],
     }),
     rollupPostcss({

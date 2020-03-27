@@ -1,6 +1,6 @@
 //
 // Remove all child nodes in parent element
-const removeChildren = (parent: Element) => {
+export const removeChildNodes = (parent: Element) => {
   while (parent instanceof Element && parent.firstChild) {
     parent.firstChild.remove();
   }
@@ -8,7 +8,7 @@ const removeChildren = (parent: Element) => {
 
 //
 // Add child node to parent element
-const addChild = (parent: Element, child: ChildNode) => {
+export const addChildNode = (parent: Element, child: ChildNode) => {
   if (parent instanceof Element && !!child) {
     parent.appendChild(child);
   }
@@ -16,22 +16,18 @@ const addChild = (parent: Element, child: ChildNode) => {
 
 //
 // Create element nodes from HTML text string
-const createNodesFromHtmlString = (html: string) => {
+export const createNodesFromHtmlString = (html: string) => {
   const template = document.createElement('template');
   template.innerHTML = html;
   return [...Array.from(template.content.childNodes)];
 };
 
-const replaceNodesFromHtmlString = (parent: Element, htmlString: string) => {
-  removeChildren(parent);
+export const replaceNodesFromHtmlString = (
+  parent: Element,
+  htmlString: string,
+) => {
+  removeChildNodes(parent);
   createNodesFromHtmlString(htmlString).forEach(child =>
-    addChild(parent, child),
+    addChildNode(parent, child),
   );
-};
-
-export default {
-  removeChildren,
-  addChild,
-  createNodesFromHtmlString,
-  replaceNodesFromHtmlString,
 };

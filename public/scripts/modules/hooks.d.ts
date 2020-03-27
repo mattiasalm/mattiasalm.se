@@ -1,7 +1,5 @@
-declare const _default: {
-    onLoad: () => void;
-    onClick: (event: MouseEvent) => void;
-    onPopState: (event: PopStateEvent) => void;
-    onKeyUp: (event: KeyboardEvent) => void;
-};
-export default _default;
+declare const onLoad: () => void;
+declare const onClick: (event: MouseEvent) => void;
+declare const onPopState: (event: PopStateEvent) => void;
+declare const onKeyUp: (event: KeyboardEvent) => void;
+export { onLoad, onClick, onPopState, onKeyUp };

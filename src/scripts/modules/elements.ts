@@ -1,4 +1,4 @@
-import config from './config';
+import { config } from "./config";
 
 interface ElementReferences {
   [key: string]: Element;
@@ -10,24 +10,22 @@ const _setElement = (name: string, selector: string): Element | null => {
   return !!elementRef ? (_elements[name] = elementRef) : null;
 };
 
-export interface GetElementReference {
-  bodyElem: Element | null;
-  navElem: Element | null;
-  contentElem: Element | null;
+export interface ElementReference {
+  body: Element | null;
+  navigation: Element | null;
+  content: Element | null;
 }
 
-const getElementReference: GetElementReference = {
-  get bodyElem() {
-    return _elements.bodyElem || _setElement('bodyElem', config.bodySelector);
+export const elementReference: ElementReference = {
+  get body() {
+    return _elements.body || _setElement('body', config.domSelectorBody);
   },
 
-  get navElem() {
-    return _elements.navElem || _setElement('navElem', config.navSelector);
+  get navigation() {
+    return _elements.navigation || _setElement('navigation', config.domSelectorNavigation);
   },
 
-  get contentElem() {
-    return _elements.contentElem || _setElement('contentElem', config.contentSelector);
+  get content() {
+    return _elements.content || _setElement('content', config.domSelectorContent);
   },
 };
-
-export default getElementReference;

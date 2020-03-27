@@ -1,18 +1,18 @@
 export interface Config {
-    fileNotFoundPath: string;
-    contentDirectory: string;
-    navContentPath: string;
-    slashFallbackPath: string;
-    activeLinkClass: string;
-    keyboardNavigationClassName: string;
-    pageLoadClassName: string;
-    pageLoadDuration: number;
-    splashLoadClassName: string;
-    splashLoadDuration: number;
-    bodySelector: string;
-    contentSelector: string;
-    navSelector: string;
+    classNameActiveLinkInNavigation: string;
+    classNameKeyboardNavigationActive: string;
+    classNamePageTransition: string;
+    classNameRemovalDelayPageTransition: number;
+    classNameRemovalDelaySplashLoading: number;
+    classNameSplashLoading: string;
+    directoryContent: string;
+    domSelectorBody: string;
+    domSelectorContent: string;
+    domSelectorNavigation: string;
+    pathFileNotFound: string;
+    pathToIndexContent: string;
+    pathToNavigationContent: string;
+    loadIndexContentOnLoad: boolean;
 }
-declare let config: Config;
+export declare let config: Config;
 export declare const setConfig: (newConfig: Partial<Config>) => Config;
-export default config;
