@@ -1,18 +1,14 @@
-# lazy
+# lazy-spa
 
 
 ## Dependencies
 
-Install all dependencies with `zsh install.sh`.
+Install all dependencies with `npm install` and `npm run install:global`.
 
 ## Serving
 
-To serve the from the `dist` folder with onchange watching for the files run `zsh serve.sh`.
+To serve the from the `public` folder with onchange watching for the files run `npm run serve`.
 
 ## Building
 
 To only build from `src` folder run `zsh build.sh`.
-
-## Deploying
-
-Deploy to Zeit production by running `zsh build.sh && zsh deploy.sh`.

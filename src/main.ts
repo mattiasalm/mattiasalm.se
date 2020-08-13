@@ -1,6 +1,5 @@
 import './styles/index.css';
-import './scripts/index';
 
-import { setConfig } from './scripts/index';
+import { init } from 'lzyspa';
 
-setConfig({});
+init();

@@ -1,5 +1,7 @@
 import { terser } from 'rollup-plugin-terser';
 import rollupPostcss from 'rollup-plugin-postcss';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 import postcss from 'postcss';
 import atImport from 'postcss-import';
 import autoprefixer from 'autoprefixer';
@@ -7,12 +9,11 @@ import postcssVariables from 'postcss-css-variables';
 import clean from 'postcss-clean';
 import CleanCSS from 'clean-css';
 import copy from 'rollup-plugin-copy';
-import typescript from 'rollup-plugin-typescript2';
 import { minify } from 'html-minifier-terser';
 import * as fs from 'fs';
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const outputFileName = 'main.min';
+const outputFileName = developmentMode ? 'main' : 'main.min';
 
 const copyTransform = contents => {
   let htmlContent = contents.toString();
@@ -66,8 +67,10 @@ export default {
   output: {
     file: `./public/${outputFileName}.js`,
     format: 'iife',
+    sourcemap: true,
   },
   plugins: [
+    nodeResolve(),
     copy({
       targets: [
         {
@@ -91,10 +94,7 @@ export default {
         !developmentMode && clean(),
       ],
     }),
-    typescript({
-      abortOnError: false,
-      clean: true,
-    }),
+    typescript(),
     !developmentMode &&
       terser({
         compress: {
