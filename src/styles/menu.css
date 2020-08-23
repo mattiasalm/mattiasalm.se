@@ -21,7 +21,7 @@
   50% {
     transform: translateY(var(--nav-menu-toggle-stroke-spacing-negative));
   }
-  50.1% {
+  50.01% {
     transform: translateY(var(--nav-menu-toggle-stroke-spacing-negative))
       scaleX(0);
   }
@@ -63,15 +63,6 @@
   }
 }
 
-@keyframes reveal {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 #menu {
   position: fixed;
   display: grid;
@@ -86,11 +77,6 @@
       auto
     );
   z-index: 1;
-  opacity: 0;
-  animation-name: reveal;
-  animation-duration: 1s;
-  animation-delay: 1s;
-  animation-fill-mode: forwards;
 }
 
 #menu input,

@@ -11,6 +11,7 @@ import CleanCSS from 'clean-css';
 import copy from 'rollup-plugin-copy';
 import { minify } from 'html-minifier-terser';
 import * as fs from 'fs';
+const sharp = require('sharp');
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const outputFileName = developmentMode ? 'main' : 'main.min';
@@ -62,6 +63,17 @@ const copyTransform = contents => {
   return minify(htmlContent, htmlMinifyOptions);
 };
 
+const iconTransform = icon => {
+  const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+  const dir = './public/images/icons';
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  sizes.map(size => sharp(icon).resize(size, size).toFile(`${dir}/icon-${size}x${size}.png`));
+  sharp(icon).resize(72,72).toFile(`${dir}/favicon.png`)
+  return icon;
+};
+
 export default {
   input: './src/main.ts',
   output: {
@@ -83,6 +95,19 @@ export default {
           dest: 'public',
           transform: copyTransform,
         },
+        {
+          src: 'src/manifest.json',
+          dest: 'public',
+        },
+        {
+          src: 'src/sw.js',
+          dest: 'public',
+        },
+        {
+          src: 'src/icon.png',
+          dest: 'public/images/icons',
+          transform: iconTransform,
+        },
       ],
     }),
     rollupPostcss({
@@ -96,15 +121,15 @@ export default {
     }),
     typescript(),
     !developmentMode &&
-      terser({
-        compress: {
-          module: true,
+    terser({
+      compress: {
+        module: true,
+      },
+      mangle: {
+        properties: {
+          keep_quoted: true,
         },
-        mangle: {
-          properties: {
-            keep_quoted: true,
-          },
-        },
-      }),
+      },
+    }),
   ],
 };
