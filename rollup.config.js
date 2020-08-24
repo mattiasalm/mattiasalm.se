@@ -104,6 +104,10 @@ export default {
           dest: 'public',
         },
         {
+          src: 'src/robots.txt',
+          dest: 'public',
+        },
+        {
           src: 'src/icon.png',
           dest: 'public/images/icons',
           transform: iconTransform,
