@@ -100,7 +100,7 @@ export default {
           dest: 'public',
         },
         {
-          src: 'src/sw.js',
+          src: 'src/service-worker.js',
           dest: 'public',
         },
         {
