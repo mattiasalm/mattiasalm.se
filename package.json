@@ -46,6 +46,6 @@
   },
   "homepage": "https://github.com/mattiasalm/lazy#readme",
   "dependencies": {
-    "lzyspa": "^1.0.10"
+    "lzyspa": "^1.0.11"
   }
 }
