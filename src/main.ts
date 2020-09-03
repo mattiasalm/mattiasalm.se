@@ -1,5 +1,5 @@
 import './styles/index.css';
 
-import { init } from 'lzyspa';
+import { init } from '@tinyspa/core';
 
 init();

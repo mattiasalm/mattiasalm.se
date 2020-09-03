@@ -37,6 +37,6 @@
   },
   "homepage": "https://github.com/mattiasalm/lazy#readme",
   "dependencies": {
-    "lzyspa": "^1.0.11"
+    "@tinyspa/core": "^1.0.0"
   }
 }
