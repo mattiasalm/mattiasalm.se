@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Lazy loading SPA page for mattiasalm.se based on tinyspa",
   "devDependencies": {
-    "@tinyspa/scripts": "^1.0.1"
+    "@tinyspa/scripts": "^1.0.2"
   },
   "scripts": {
     "build": "tinyspa-scripts build",
