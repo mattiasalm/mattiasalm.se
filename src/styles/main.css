@@ -17,16 +17,23 @@ ul {
   font-weight: normal;
 }
 
-h1,
-h2,
-h3,
 p {
   margin-bottom: 1rem;
-  opacity: 1;
+}
+
+section,
+article > header {
+  padding-bottom: 1.5rem;
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: 0.3rem;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 h2 {
@@ -34,12 +41,28 @@ h2 {
 }
 
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
 }
 
 p {
   font-size: 1.3rem;
-  line-height: 1.25em;
+  line-height: 1.4em;
+}
+
+small {
+  font-size: 1rem;
+}
+
+.tight {
+  margin-bottom: 0;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 html {
@@ -50,6 +73,13 @@ html {
 body {
   color: var(--color-body-text);
   font-family: 'Courier New', 'Courier', monospace;
+  display: grid;
+  grid-template-rows: var(--nav-menu-toggle-container-outer-size) auto minmax(auto, max-content);
+  grid-template-columns: minmax(0, auto) minmax(0, var(--content-max-width)) minmax(
+      0,
+      auto
+    );
+  min-height: 100vh;
 }
 
 img {
@@ -61,13 +91,12 @@ a {
   text-decoration: none;
   color: var(--color-body-link-color);
   cursor: pointer;
-  border-bottom: 0.1rem dashed var(--color-body-link-color);
+  border-bottom: 0.1em dashed var(--color-body-link-color);
 }
 
 a:hover {
   border-bottom-style: solid;
 }
-
 
 a.active-link {
   color: var(--color-body-link-color-active);
@@ -84,15 +113,61 @@ a:focus {
   outline: var(--focus-outline);
 }
 
-body #content {
+body main {
   transition: var(--animation-transition-duration-short) opacity
     var(--animation-timing-function);
-  padding: 1rem 2rem;
-  max-width: var(--content-max-width);
-  margin: var(--nav-menu-toggle-container-outer-size) auto;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  padding: 0 1.5rem;
 }
 
-body.fade #content {
+body footer {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+  padding: 3rem 1.5rem 1.5rem 1.5rem;
+}
+
+body footer p {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+body.fade main {
   overflow: hidden;
   opacity: 0;
+}
+
+@media print {
+  html {
+    background: white;
+  }
+
+  body {
+    color: black;
+  }
+
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+  
+  small {
+    font-size: 0.8rem;
+  }
 }
