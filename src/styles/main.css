@@ -80,8 +80,15 @@ body {
       auto
     );
   min-height: 100vh;
-  min-height: -webkit-fill-available;
 }
+
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) {
+
+    body { 
+      min-height: -webkit-fill-available;
+    }
+}}
 
 img {
   max-width: 100%;
