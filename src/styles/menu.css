@@ -88,6 +88,7 @@
   margin: 0;
   width: var(--nav-menu-toggle-container-outer-size);
   height: var(--nav-menu-toggle-container-outer-size);
+  margin-top: env(safe-area-inset-top, 0);
 }
 
 #menu input {

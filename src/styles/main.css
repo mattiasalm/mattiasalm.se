@@ -80,6 +80,8 @@ body {
       auto
     );
   min-height: 100vh;
+  padding-top: 0;
+  padding-top: env(safe-area-inset-top,0);
 }
 
 @media not all and (min-resolution:.001dpcm)
@@ -89,6 +91,12 @@ body {
       min-height: -webkit-fill-available;
     }
 }}
+
+@media all and (display-mode: standalone) {
+  body {
+    min-height: 100vh;
+  }
+}
 
 img {
   max-width: 100%;
