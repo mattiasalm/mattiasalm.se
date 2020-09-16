@@ -1,6 +1,7 @@
 module.exports = {
   name: 'Mattias Alm',
-  iconTextColor: 'rgba(255, 255, 255, 0.9)',
+  description: 'Mattias Alm - web developer',
+  iconTextColor: '#fff',
   backgroundColor: '#e2532d',
   themeColor: '#e2532d',
 };
