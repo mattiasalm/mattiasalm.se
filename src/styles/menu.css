@@ -100,7 +100,7 @@
   background: var(--color-nav-background);
   color: var(--color-nav-text);
   position: relative;
-  left: -100vh;
+  left: -100vw;
   opacity: 0;
   transition: var(--animation-transition-duration-short) opacity
     var(--animation-timing-function);
