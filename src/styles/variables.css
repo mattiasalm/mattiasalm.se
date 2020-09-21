@@ -11,16 +11,12 @@
   --content-max-width: 45rem;
   --animation-timing-function: ease-in-out;
   --animation-transition-duration-long: 320ms;
-  --animation-transition-duration-short: 240ms;
+  --animation-transition-duration-short: 200ms;
 
   --nav-menu-toggle-stroke-height: 2px;
-  --nav-menu-toggle-stroke-margin-top: -1px; /* - half stroke height */
   --nav-menu-toggle-stroke-border-radius: 0;
   --nav-menu-toggle-stroke-spacing: 12px;
-  --nav-menu-toggle-stroke-spacing-negative: -12px;
   --nav-menu-toggle-container-inner-size: 40px;
-  --nav-menu-toggle-container-outer-size: 88px; /* inner size + 2*padding */
-  --nav-menu-toggle-container-padding: 24px;
-  --nav-menu-toggle-container-border-radius: 0;
+  --nav-menu-toggle-container-outer-size: 88px;
   --nav-menu-toggle-stroke-animation-timing-function: ease-in-out;
 }
