@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  33% {
+    background-position: 100% 50%;
+  }
+  67% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@theme {
+  --font-sans: "Cutive Mono", "Courier New", "monospace";
+
+  --animate-blink: blink 1.2s ease-in-out infinite;
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+p {
+  @apply text-[1.2rem] sm:text-[1.5rem];
+}
+
+h1 {
+  @apply text-[2rem] sm:text-[3rem];
+}
+
+a {
+  @apply hover:text-amber-400;
+}
