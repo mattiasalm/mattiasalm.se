@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "mattiasalm.se",
+  "project_id": "dbd86118-5421-4b5f-a20f-ff7b760bddef"
+}
