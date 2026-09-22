@@ -2,6 +2,6 @@
   "database": "dolt",
   "backend": "dolt",
   "dolt_mode": "server",
-  "dolt_database": "mattiasalm.se",
+  "dolt_database": "masite",
   "project_id": "dbd86118-5421-4b5f-a20f-ff7b760bddef"
 }
