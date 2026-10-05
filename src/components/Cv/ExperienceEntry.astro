@@ -1,0 +1,72 @@
+---
+import type { CvExperience } from "../../data/cv";
+
+type Props = {
+  /** One employer and every role held there. */
+  readonly entry: CvExperience;
+};
+
+const { entry } = Astro.props;
+
+/*
+ * Each row puts its meta (location or period) in the left gutter, on the same
+ * baseline as its content. On phones the row stacks with the content first.
+ */
+const row =
+  "flex flex-col-reverse sm:grid sm:grid-cols-[11rem_1fr] sm:items-baseline sm:gap-x-10 print:grid print:grid-cols-[10.5rem_1fr] print:items-baseline print:gap-x-6";
+const meta = "text-label text-dim print:text-neutral-700";
+---
+
+<article class="flex flex-col gap-3 break-inside-avoid">
+  <header class="flex flex-col gap-1">
+    <div class={row}>
+      <p class={meta}>{entry.location}</p>
+
+      <h3
+        class="font-display text-heading text-hot glow-soft plain:text-[1.2rem] plain:font-semibold plain:leading-tight print:text-black"
+      >
+        {
+          entry.url ? (
+            <a
+              href={entry.url}
+              class="group inline-flex items-baseline gap-2 px-1 -mx-1 py-1 -my-1 hover:bg-phosphor hover:text-screen hover:[text-shadow:none] active:bg-hot"
+            >
+              {entry.employer}
+              <span class="text-[1.25rem] text-dim group-hover:text-screen plain:text-body print:hidden" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          ) : (
+            entry.employer
+          )
+        }
+      </h3>
+    </div>
+
+    <ul class="flex flex-col">
+      {
+        entry.roles.map((role) => (
+          <li class={row}>
+            <span class:list={[meta, "whitespace-nowrap"]}>[{role.period}]</span>
+            <span class="text-body text-dim print:text-[0.9rem] print:text-neutral-700">{role.title}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </header>
+
+  <div class={row}>
+    <ul
+      class="flex flex-col gap-1 text-body leading-snug sm:col-start-2 print:col-start-2 print:text-[0.9rem] print:gap-0.5 print:text-black"
+    >
+      {
+        entry.points.map((point) => (
+          <li class="grid grid-cols-[1.5rem_1fr]">
+            <span class="text-dim print:text-black" aria-hidden="true">&gt;</span>
+            {point}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</article>

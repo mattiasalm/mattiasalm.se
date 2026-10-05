@@ -1,24 +1,46 @@
 @import "tailwindcss";
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 0%;
+/* Boring mode: the plain, recruiter-friendly view, set by `?mode=boring`. */
+@custom-variant boring (&:where([data-mode="boring"], [data-mode="boring"] *));
+
+/* Shared by print and boring mode — both are the plain document. */
+@custom-variant plain {
+  @media print {
+    @slot;
   }
-  33% {
-    background-position: 100% 50%;
-  }
-  67% {
-    background-position: 50% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
+
+  &:where([data-mode="boring"], [data-mode="boring"] *) {
+    @slot;
   }
 }
 
 @theme {
-  --font-sans: "Cutive Mono", "Courier New", "monospace";
+  --font-sans: "IBM Plex Mono", "Courier New", monospace;
+  --font-display: "VT323", "Courier New", monospace;
 
-  --animate-blink: blink 1.2s ease-in-out infinite;
+  /* Body type scale. 14px is the floor, even on phones. */
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.5;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.7;
+
+  /* Display (VT323) scale. */
+  --text-heading: 2rem;
+  --text-heading--line-height: 1;
+
+  /* Single-phosphor palette: every tone is the same green at a different intensity. */
+  --color-screen: oklch(0.15 0.025 152);
+  --color-screen-raised: oklch(0.19 0.035 152);
+  --color-rule: oklch(0.38 0.08 150);
+  --color-dim: oklch(0.66 0.13 148);
+  --color-phosphor: oklch(0.88 0.2 146);
+  --color-hot: oklch(0.95 0.12 140);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-blink: blink 1.06s steps(1, end) infinite;
   @keyframes blink {
     0%,
     100% {
@@ -28,16 +50,236 @@
       opacity: 0;
     }
   }
+
+  /* Lines appear whole, like a terminal printing them. */
+  --animate-print: print 0.01s steps(1, end) both;
+  @keyframes print {
+    from {
+      visibility: hidden;
+    }
+    to {
+      visibility: visible;
+    }
+  }
+
+  /* A tube warming up: brief flicker, then settled glow. */
+  --animate-power-on: power-on 0.9s var(--ease-out-quint) both;
+  @keyframes power-on {
+    0% {
+      opacity: 0;
+      filter: brightness(3) blur(4px);
+    }
+    20% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 0.4;
+    }
+    45% {
+      opacity: 1;
+      filter: brightness(1.6) blur(1px);
+    }
+    100% {
+      opacity: 1;
+      filter: none;
+    }
+  }
+
+  --animate-flicker: flicker 6s steps(1, end) infinite;
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    47% {
+      opacity: 0.94;
+    }
+    48% {
+      opacity: 1;
+    }
+    83% {
+      opacity: 0.97;
+    }
+  }
 }
 
-p {
-  @apply text-[1.2rem] sm:text-[1.5rem];
+/* Stagger entrances with `style="--delay: 120ms"`. */
+@utility delay-var {
+  animation-delay: var(--delay, 0ms);
 }
 
-h1 {
-  @apply text-[2rem] sm:text-[3rem];
+@utility glow {
+  text-shadow:
+    0 0 2px color-mix(in oklch, var(--color-phosphor) 70%, transparent),
+    0 0 14px color-mix(in oklch, var(--color-phosphor) 45%, transparent);
 }
 
-a {
-  @apply hover:text-amber-400;
+@utility glow-soft {
+  text-shadow: 0 0 6px color-mix(in oklch, var(--color-phosphor) 35%, transparent);
+}
+
+/* Panel with HUD corner accents, top-left and bottom-right. */
+@utility hud-panel {
+  position: relative;
+  border: 1px solid var(--color-rule);
+  background: color-mix(in oklch, var(--color-screen-raised) 70%, transparent);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--color-phosphor);
+    border-style: solid;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+
+  &::after {
+    right: -1px;
+    bottom: -1px;
+    border-width: 0 2px 2px 0;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    /* Faint grid behind the glass, then a vignette toward the tube edges. */
+    background-color: var(--color-screen);
+    background-image:
+      radial-gradient(ellipse at center, transparent 55%, oklch(0.08 0.02 152 / 0.85) 100%),
+      linear-gradient(color-mix(in oklch, var(--color-rule) 22%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-rule) 22%, transparent) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      48px 48px,
+      48px 48px;
+    background-attachment: fixed;
+  }
+
+  /* Scanlines over everything, never intercepting input. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0 2px,
+      oklch(0.05 0.02 152 / 0.28) 2px 3px
+    );
+    animation: var(--animate-flicker);
+  }
+
+  ::selection {
+    background: var(--color-phosphor);
+    color: var(--color-screen);
+    text-shadow: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-phosphor);
+    outline-offset: 4px;
+  }
+}
+
+/* Boring mode swaps the phosphor palette for ink on paper and drops every effect. */
+[data-mode="boring"] {
+  --color-screen: oklch(1 0 0);
+  --color-screen-raised: oklch(1 0 0);
+  --color-rule: oklch(0.82 0 0);
+  --color-dim: oklch(0.45 0 0);
+  --color-phosphor: oklch(0.2 0 0);
+  --color-hot: oklch(0.2 0 0);
+  --font-display: "IBM Plex Mono", "Courier New", monospace;
+
+  color-scheme: light;
+
+  & body {
+    background-image: none;
+  }
+
+  & body::after {
+    display: none;
+  }
+
+  & *,
+  & *::before,
+  & *::after {
+    animation: none !important;
+    transition: none !important;
+    text-shadow: none !important;
+  }
+
+  & .hud-panel {
+    background: none;
+  }
+
+  & .hud-panel::before,
+  & .hud-panel::after {
+    display: none;
+  }
+
+  & main a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  /* Print is the plain document too: no pixel font. */
+  :root {
+    --font-display: "IBM Plex Mono", "Courier New", monospace;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  body::after {
+    display: none;
+  }
+
+  * {
+    animation: none !important;
+    text-shadow: none !important;
+  }
+
+  .hud-panel {
+    background: none;
+    border-color: black;
+  }
+
+  .hud-panel::before,
+  .hud-panel::after {
+    display: none;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }

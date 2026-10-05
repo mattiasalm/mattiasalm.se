@@ -1,0 +1,29 @@
+---
+type Props = {
+  /** Section heading, e.g. `Experience`. */
+  readonly title: string;
+  /** Position in the CV, rendered as a zero-padded index, e.g. `1` → `01`. */
+  readonly number: number;
+};
+
+const { title, number } = Astro.props;
+---
+
+<section class="flex flex-col gap-8 sm:gap-10 animate-print delay-var [--delay:500ms] print:gap-4">
+  <h2
+    class="flex items-baseline gap-3 border-b border-rule pb-3 boring:border-phosphor font-display uppercase leading-none print:border-black print:pb-1 print:break-after-avoid"
+  >
+    <span class="text-[1.4rem] text-dim plain:hidden" aria-hidden="true">
+      // {String(number).padStart(2, "0")}
+    </span>
+    <span
+      class="text-[clamp(2rem,5vw,2.75rem)] tracking-[0.04em] text-hot glow plain:text-[1.25rem] plain:font-semibold plain:tracking-normal print:text-black"
+    >
+      {title}
+    </span>
+  </h2>
+
+  <div class="flex flex-col gap-10 sm:gap-12 print:gap-5">
+    <slot />
+  </div>
+</section>

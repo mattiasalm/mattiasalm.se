@@ -1,0 +1,23 @@
+---
+import type { CvSkillGroup } from "../../data/cv";
+
+type Props = {
+  /** One thematic group of capabilities. */
+  readonly group: CvSkillGroup;
+};
+
+const { group } = Astro.props;
+---
+
+<!-- One row of the skills table: label column, then the capabilities. -->
+<div
+  class="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-x-10 px-4 py-3 break-inside-avoid print:grid-cols-[10.5rem_1fr] print:gap-x-6 print:px-2 print:py-1"
+>
+  <h3 class="text-label uppercase tracking-[0.08em] text-dim sm:pt-0.5 print:text-neutral-700">
+    {group.label}
+  </h3>
+
+  <p class="text-body leading-snug print:text-[0.9rem] print:text-black">
+    {group.body}
+  </p>
+</div>

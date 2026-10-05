@@ -1,18 +1,40 @@
 ---
-import "@fontsource/cutive-mono";
+import "@fontsource/vt323";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/600.css";
 import "../styles/global.css";
+
+type Props = {
+  /** Page title, shown in the browser tab. */
+  readonly title?: string;
+  /** Meta description for search engines and link previews. */
+  readonly description?: string;
+};
+
+const {
+  title = "Mattias Alm",
+  description = "Mattias Alm, systems architect in Jönköping, Sweden.",
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#040e06" />
+    <!-- Apply boring mode before first paint so the CRT look never flashes. -->
+    <script is:inline>
+      if (new URLSearchParams(location.search).get("mode") === "boring") {
+        document.documentElement.dataset.mode = "boring";
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Mattias Alm</title>
+    <meta name="description" content={description} />
+    <title>{title}</title>
   </head>
-  <body class="grid min-h-[100dvh] bg-neutral-900">
+  <body class="grid min-h-[100dvh] text-phosphor font-sans print:min-h-0 print:bg-white print:text-black">
     <slot />
   </body>
 </html>

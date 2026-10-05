@@ -1,12 +1,104 @@
 ---
+import Divider from "./Divider.astro";
+import ModeToggle from "./ModeToggle/index.astro";
+
+const bootLog = [
+  ["00:00:01", "BOOT", "mattiasalm.se", "OK"],
+  ["00:00:01", "LOAD", "~/.profile", "OK"],
+  ["00:00:02", "ROLE", "systems_architect", "OK"],
+  ["00:00:02", "ROLE", "fullstack_dev", "OK"],
+  ["00:00:03", "LOC", "jönköping, se", "OK"],
+] as const;
+
+const links = [
+  { label: "CV", href: "/cv" },
+  { label: "GitHub", href: "https://github.com/mattiasalm" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mattiasalm/" },
+] as const;
+
+const lineDelay = 110;
+const nameDelay = 250 + bootLog.length * lineDelay;
 ---
 
-<main class="z-10 h-full flex flex-col gap-4 sm:gap-6 items-center justify-center text-white">
-    <p class="text-neutral-400">Mattias Alm</p>
-    <h1>
-        dev, architect<span class="animate-blink">_</span>
-    </h1>
-    <p>Jönköping, Sweden</p>
-    <p><a href="https://github.com/mattiasalm">GitHub</a></p>
-    <p><a href="https://www.linkedin.com/in/mattiasalm/">LinkedIn</a></p>
+<main
+  class="min-h-[100dvh] grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto] gap-10 boring:flex boring:flex-col boring:min-h-0 boring:w-full boring:max-w-[60rem] boring:mx-auto boring:gap-12 px-[clamp(1rem,4vw,3.5rem)] py-[clamp(1.25rem,3vw,2.5rem)]"
+>
+  <header
+    class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-label sm:text-body text-dim"
+  >
+    <span class="boring:hidden">[ SYS v26.10 ]</span>
+    <span class="hidden boring:inline">mattiasalm.se</span>
+    <span class="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <span class="whitespace-nowrap">57.79° N, 14.20° E</span>
+      <ModeToggle />
+    </span>
+  </header>
+
+  <section class="self-center flex flex-col gap-8 sm:gap-10 boring:self-stretch">
+    <ol
+      class="boring:hidden flex flex-col gap-0.5 max-w-[46ch] text-label sm:text-body text-dim glow-soft"
+      aria-label="Boot log"
+    >
+      {
+        bootLog.map(([time, action, target, status], index) => (
+          <li
+            class="flex gap-2 sm:gap-3 animate-print delay-var whitespace-nowrap"
+            style={`--delay: ${150 + index * lineDelay}ms`}
+          >
+            <span>[{time}]</span>
+            <span class="w-[4ch]">{action}</span>
+            <span class="min-w-0 flex-1 overflow-hidden">
+              {target} <span class="text-rule">{".".repeat(40)}</span>
+            </span>
+            <span class="text-phosphor">{status}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="flex flex-col gap-2">
+      <h1
+        class="font-display uppercase leading-[0.8] tracking-[0.02em] text-[clamp(4.5rem,min(19vw,32dvh),20rem)] text-hot glow animate-power-on delay-var boring:text-[2.75rem] boring:font-semibold boring:leading-tight boring:tracking-normal"
+        style={`--delay: ${nameDelay}ms`}
+      >
+        Mattias Alm
+      </h1>
+
+      <p
+        class="font-display text-[clamp(1.6rem,3.5vw,2.6rem)] leading-none animate-print delay-var glow-soft boring:text-[1.1rem]"
+        style={`--delay: ${nameDelay + 400}ms`}
+      >
+        <span class="boring:hidden">&gt; </span>dev, architect<span class="animate-blink boring:hidden">_</span>
+      </p>
+
+      <p class="hidden boring:block text-body text-dim">Jönköping, Sweden</p>
+    </div>
+  </section>
+
+  <footer class="flex flex-col gap-6">
+    <Divider delay={nameDelay + 500} />
+
+    <nav aria-label="Links">
+      <ul class="flex flex-col sm:flex-row gap-3 sm:gap-5 boring:flex-col! boring:gap-1!">
+        {
+          links.map((link, index) => (
+            <li
+              class="animate-print delay-var"
+              style={`--delay: ${nameDelay + 600 + index * 100}ms`}
+            >
+              <a
+                href={link.href}
+                class="hud-panel group flex items-baseline gap-3 px-5 py-2.5 font-display text-[1.75rem] sm:text-[2rem] leading-none uppercase boring:inline-flex boring:border-0 boring:px-0 boring:py-1.5 boring:text-[1.1rem]! boring:normal-case boring:no-underline! transition-colors duration-200 hover:bg-phosphor hover:text-screen active:bg-hot"
+              >
+                <span class="text-[1.2rem] text-dim group-hover:text-screen boring:text-body">
+                  [{index + 1}]
+                </span>
+                <span class="glow-soft group-hover:[text-shadow:none] boring:underline boring:underline-offset-4">{link.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </footer>
 </main>

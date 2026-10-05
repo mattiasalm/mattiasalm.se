@@ -1,0 +1,19 @@
+---
+type Props = {
+  /** Delay before the divider prints, in milliseconds. @default 0 */
+  readonly delay?: number;
+};
+
+const { delay = 0 } = Astro.props;
+---
+
+<!-- HUD divider: a rule that fades at both ends, with a diamond at its centre. -->
+<div
+  class="flex items-center gap-4 animate-print delay-var print:hidden boring:hidden"
+  style={`--delay: ${delay}ms`}
+  aria-hidden="true"
+>
+  <span class="h-px flex-1 bg-gradient-to-r from-transparent to-rule"></span>
+  <span class="size-1.5 rotate-45 bg-phosphor"></span>
+  <span class="h-px flex-1 bg-gradient-to-l from-transparent to-rule"></span>
+</div>

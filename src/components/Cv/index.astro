@@ -1,0 +1,90 @@
+---
+import { cv } from "../../data/cv";
+import ExperienceEntry from "./ExperienceEntry.astro";
+import Section from "./Section.astro";
+import SkillGroup from "./SkillGroup.astro";
+import TitleBlock from "./TitleBlock.astro";
+import ModeToggle from "../ModeToggle/index.astro";
+---
+
+<main
+  class="w-full max-w-[60rem] mx-auto px-[clamp(1rem,4vw,3rem)] pt-[clamp(1.25rem,3vw,2.5rem)] pb-24 flex flex-col gap-16 sm:gap-20 print:max-w-none print:px-0 print:py-0 print:gap-6 print:text-black"
+>
+  <nav class="flex items-center justify-between gap-4 text-label text-dim print:hidden">
+    <a href="/" class="px-1 -mx-1 py-3 -my-3 hover:bg-phosphor hover:text-screen">
+      <span class="boring:hidden">&lt; cd ~</span><span class="hidden boring:inline">← mattiasalm.se</span>
+    </a>
+    <span class="flex items-center gap-4">
+      <span class="hidden sm:inline boring:hidden">~/cv</span>
+      <ModeToggle />
+    </span>
+  </nav>
+
+  <header class="flex flex-col gap-8 sm:gap-10 print:gap-4">
+    <div class="flex flex-col gap-3 animate-power-on">
+      <h1
+        class="font-display uppercase leading-[0.8] tracking-[0.02em] text-[clamp(4rem,12vw,8.5rem)] text-hot glow plain:text-[2.75rem] plain:font-semibold plain:leading-tight print:text-black"
+      >
+        {cv.header.name}
+      </h1>
+
+      <p class="font-display text-[clamp(1.5rem,3vw,2rem)] leading-none glow-soft plain:text-[1.1rem] print:text-black">
+        <span class="plain:hidden">&gt; </span>{cv.header.title.toLowerCase()}<span class="animate-blink plain:hidden">_</span>
+      </p>
+    </div>
+
+    <div class="animate-print delay-var" style="--delay: 300ms">
+      <TitleBlock header={cv.header} />
+    </div>
+
+    <p
+      class="max-w-[60ch] text-lead glow-soft animate-print delay-var print:text-[0.95rem] print:max-w-none"
+      style="--delay: 400ms"
+    >
+      {cv.profile}
+    </p>
+  </header>
+
+  <Section title="Experience" number={1}>
+    {cv.experience.map((entry) => <ExperienceEntry entry={entry} />)}
+  </Section>
+
+  <Section title="Skills" number={2}>
+    <div class="hud-panel divide-y divide-rule print:divide-y-0">
+      {cv.skills.map((group) => <SkillGroup group={group} />)}
+    </div>
+  </Section>
+
+  <Section title="Education" number={3}>
+    {
+      cv.education.map((item) => (
+        <div class="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-x-10 break-inside-avoid print:grid-cols-[10.5rem_1fr] print:gap-x-6">
+          <p class="text-label text-dim sm:pt-1.5 print:text-neutral-700 print:pt-0">
+            [{item.period}]
+          </p>
+          <div>
+            <h3 class="font-display text-heading text-hot glow-soft plain:text-[1.2rem] plain:font-semibold plain:leading-tight print:text-black">
+              {item.institution}
+            </h3>
+            <p class="mt-1 text-body text-dim print:text-[0.9rem] print:text-neutral-700">{item.programme}</p>
+          </div>
+        </div>
+      ))
+    }
+  </Section>
+
+  <Section title="Languages" number={4}>
+    <ul class="flex flex-wrap gap-x-12 gap-y-4">
+      {
+        cv.languages.map((item) => (
+          <li class="flex flex-col gap-1">
+            <span class="font-display text-heading text-hot glow-soft plain:text-[1.2rem] plain:font-semibold plain:leading-tight print:text-black">
+              {item.language}
+            </span>
+            <span class="text-label text-dim print:text-neutral-700">{item.level}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+</main>

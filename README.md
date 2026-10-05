@@ -1,48 +1,39 @@
-# Astro Starter Kit: Basics
+# mattiasalm.se
+
+Personal site and CV for Mattias Alm. It's a static Astro site styled with Tailwind CSS, with a green CRT look by default and a plain "boring mode" for anyone who just wants to read the CV.
+
+## Running it
 
 ```sh
-npm create astro@latest -- --template basics
+yarn install
+yarn dev       # local dev server at http://localhost:4321
+yarn build     # static build into dist/
+yarn preview   # serve dist/ to check the production build
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Where things live
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+All CV content is in `src/data/cv/index.ts`. Edit that file to change the CV; the `/cv` page and `/llms.txt` are both built from it, so they stay in sync.
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  data/cv/           CV content and its types
+  pages/             index (landing), cv, llms.txt
+  components/Cv/     the CV page and its parts
+  components/ModeToggle/   boring mode button and URL handling
+  components/Info.astro    the landing page
+  styles/global.css  palette, type scale, CRT effects, boring mode and print styles
+public/              favicon and robots.txt
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Boring mode
 
-## 🧞 Commands
+Adding `?mode=boring` to any URL switches to plain black on white with no effects. The toggle button in the header does the same and keeps the param on internal links, so you can send someone `mattiasalm.se/cv?mode=boring` directly. Boring mode and print share their styles, so printing the CV gives the same clean layout.
 
-All commands are run from the root of the project, from a terminal:
+## SEO and crawlers
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The build generates a sitemap (`@astrojs/sitemap`, using `site` from `astro.config.mjs`). `public/robots.txt` allows all crawlers and points to the sitemap, and `/llms.txt` serves the CV as plain Markdown for AI tools.
 
-## 👀 Want to learn more?
+## Deploying
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Any static host works. Use `yarn build` as the build command and `dist` as the output folder.

@@ -1,0 +1,48 @@
+---
+import type { CvHeader } from "../../data/cv";
+
+type Props = {
+  /** Location and contact details shown in the block. */
+  readonly header: CvHeader;
+};
+
+const { header } = Astro.props;
+---
+
+<!-- A HUD panel laid out like a terminal report table: header bar, then ruled cells. -->
+<div class="hud-panel">
+  <p
+    class="border-b border-rule px-4 py-2 text-label text-dim plain:hidden"
+  >
+    <span>~/.profile</span>
+  </p>
+
+  <dl
+    class="grid grid-cols-1 sm:grid-cols-[1fr_2fr] divide-y sm:divide-y-0 sm:divide-x divide-rule print:grid-cols-[1fr_2fr] print:divide-y-0 print:divide-x print:divide-black"
+  >
+    <div class="flex flex-col gap-1 px-4 py-3 print:p-2">
+      <dt class="text-label uppercase text-dim print:text-neutral-700">Based in</dt>
+      <dd class="font-semibold leading-snug print:text-black">{header.location}</dd>
+    </div>
+
+    <div class="flex flex-col gap-1 px-4 py-3 print:p-2">
+      <dt class="text-label uppercase text-dim print:text-neutral-700">Contact</dt>
+      <dd>
+        <ul class="flex flex-col">
+          {
+            header.links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-block py-2.5 sm:py-1 hover:bg-phosphor hover:text-screen active:bg-hot print:py-0 print:text-black"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </dd>
+    </div>
+  </dl>
+</div>
